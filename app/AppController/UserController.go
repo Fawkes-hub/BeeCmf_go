@@ -31,12 +31,6 @@ func (c *UserController) Login() {
 // @router /login [post]
 func (c *UserController) LoginPost() {
 	//验证邮箱密码是否正确
-	user, _ := models.UserLogin(
-		c.GetString("username"),
-		c.GetString("password"),
-	)
-	logs.Info("查询的用户数据", user)
-	return
 	if !cpt.VerifyReq(c.Ctx.Request) {
 		c.Abort500("验证码不正确", "")
 	}
@@ -49,17 +43,18 @@ func (c *UserController) LoginPost() {
 		}
 	}
 	//验证邮箱密码是否正确
-	//user, err := models.UserLogin(
-	//	c.GetString("username"),
-	//	c.GetString("password"),
-	//)
-	//if err != nil {
-	//	c.Abort500(err.Error(), "")
-	//} else {
-	//	//验证成功 进行session的记录
-	//	c.SetSession(SESSION_USER_KEY, user)
-	//	c.Abort200("登录成功", "/")
-	//}
+	user, err := models.UserLogin(
+		c.GetString("username"),
+		c.GetString("password"),
+	)
+	if err != nil {
+		logs.Info("错误信息", err.Error())
+		c.Abort500(err.Error(), "")
+	} else {
+		//验证成功 进行session的记录
+		c.SetSession(SESSION_USER_KEY, user)
+		c.Abort200("登录成功", "/")
+	}
 }
 
 // @router /user [get]

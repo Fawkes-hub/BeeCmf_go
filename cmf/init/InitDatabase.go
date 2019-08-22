@@ -17,12 +17,11 @@ func InitDatabase() {
 	dbname := beego.AppConfig.DefaultString("db.name", "beecmf")
 	dsn := user + ":" + password + "@(" + host + ":" + port + ")/" + dbname + "?charset=utf8&parseTime=True&loc=Local"
 	var err error
-	var Db = models.ModelDb()
-	Db, err = gorm.Open("mysql", dsn)
+	models.Db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		panic("数据库连接失败：" + err.Error())
 	}
-	Db.SingularTable(true)
+	models.Db.SingularTable(true)
 	//设置默认的表名
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		prefix := beego.AppConfig.DefaultString("db.prefix", "cmf_")
@@ -31,6 +30,6 @@ func InitDatabase() {
 
 	//是否默认开启debug模式
 	if beego.AppConfig.String("runmode") == "dev" {
-		Db.LogMode(true)
+		models.Db.LogMode(true)
 	}
 }
