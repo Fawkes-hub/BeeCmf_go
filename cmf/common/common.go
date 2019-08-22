@@ -16,11 +16,11 @@ func SycMd5(str string) string {
 	var err error
 	_, err = io.WriteString(h, str)
 	if err != nil {
-		panic("错误：密码加密失败")
+		panic("错误：密码加密失败：" + err.Error())
 	}
 	_, err = io.WriteString(h, fmt.Sprintf("%x", h.Sum(nil)))
 	if err != nil {
-		panic("错误：密码加密失败")
+		panic("错误：密码加密失败：" + err.Error())
 	}
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
