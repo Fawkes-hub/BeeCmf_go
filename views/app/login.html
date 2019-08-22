@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>BeeCMF后台登录</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="robots" content="noindex,nofollow">
+
+    <link rel="stylesheet" href="static/layui/css/layui.css">
+</head>
+<style>
+    .layadmin-user-login-main {
+        position: relative;
+        left: 0;
+        top: 0;
+        padding: 110px 0;
+        min-height: 100%;
+        box-sizing: border-box;
+        width: 375px;
+        margin: 0 auto;
+    }
+</style>
+<body>
+<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login">
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header" style="text-align:center">
+            <h2>BeeCMF后台登录</h2>
+            <p>---</p>
+        </div>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">长输入框</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="static/layui/layui.js"></script>
+<script>
+
+    layui.use(['form', 'jquery'], function () {
+        var $ = layui.$
+            , form = layui.form;
+        form.render();
+
+        //提交
+        form.on('submit(LAY-user-login-submit)', function (obj) {
+
+            //请求登入接口
+            $.ajax({
+                url: './json/user/login.js' //实际使用请改成服务端真实接口
+                , data: obj.field
+                , done: function (res) {
+
+                    //请求成功后，写入 access_token
+                    layui.data(setter.tableName, {
+                        key: setter.request.tokenName
+                        , value: res.data.access_token
+                    });
+
+                    //登入成功的提示与跳转
+                    layer.msg('登入成功', {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    }, function () {
+                        location.hash = search.redirect ? decodeURIComponent(search.redirect) : '/';
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>
