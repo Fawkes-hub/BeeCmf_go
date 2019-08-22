@@ -28,7 +28,7 @@ func init() {
 	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"],
 		beego.ControllerComments{
 			Method:           "LoginPost",
-			Router:           `/loginPost`,
+			Router:           `/login`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

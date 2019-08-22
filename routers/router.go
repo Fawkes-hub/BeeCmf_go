@@ -7,7 +7,11 @@ import (
 )
 
 func init() {
+	//后台的路由
 	beego.Include(&AppController.IndexController{})
+	beego.Include(&AppController.UserController{})
+
+	//前台的路由
 	beego.Include(&ApiController.IndexController{})
 	//
 	////前台请求的api接口

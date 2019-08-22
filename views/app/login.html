@@ -1,91 +1,80 @@
-<!DOCTYPE html>
-<html>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title>BeeCMF后台登录</title>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge"/>
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">
-    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
 
-    <link rel="stylesheet" href="static/layui/css/layui.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/login.css" media="all">
 </head>
-<style>
-    .layadmin-user-login-main {
-        position: relative;
-        left: 0;
-        top: 0;
-        padding: 110px 0;
-        min-height: 100%;
-        box-sizing: border-box;
-        width: 375px;
-        margin: 0 auto;
-    }
-</style>
 <body>
-<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login">
+<div class="layui-carousel video_mask bg-img" id="login_carousel" >
 
-    <div class="layadmin-user-login-main">
-        <div class="layadmin-user-login-box layadmin-user-login-header" style="text-align:center">
-            <h2>BeeCMF后台登录</h2>
-            <p>---</p>
+    <div class="login layui-anim layui-anim-up">
+        <div class="login-center">
+            <h1>BeeCMF 轻后台管理系统</h1></p>
+            <form class="layui-form" action="" method="post">
+                <div class="layui-form-item login-item">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入账号" autocomplete="off"  value="{{.username}}" class="layui-input">
+                </div>
+                <div class="layui-form-item  login-item">
+                    <input type="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" value="" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="text" name="captcha" required lay-verify="required"
+                               placeholder="请输入验证码"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="login-captcha">{{create_captcha}}</div>
+                </div>
+                <button class="layui-btn login_btn  login-item" lay-submit lay-filter="login">登陆</button>
+            </form>
         </div>
-        <form class="layui-form layui-form-pane" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">长输入框</label>
-                <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
-            </div>
-            <div class="layui-form-item">
-                <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
-            </div>
-        </form>
     </div>
 </div>
-<script src="static/layui/layui.js"></script>
-<script>
-
-    layui.use(['form', 'jquery'], function () {
-        var $ = layui.$
-            , form = layui.form;
-        form.render();
-
-        //提交
-        form.on('submit(LAY-user-login-submit)', function (obj) {
-
-            //请求登入接口
-            $.ajax({
-                url: './json/user/login.js' //实际使用请改成服务端真实接口
-                , data: obj.field
-                , done: function (res) {
-
-                    //请求成功后，写入 access_token
-                    layui.data(setter.tableName, {
-                        key: setter.request.tokenName
-                        , value: res.data.access_token
-                    });
-
-                    //登入成功的提示与跳转
-                    layer.msg('登入成功', {
-                        offset: '15px'
-                        , icon: 1
-                        , time: 1000
-                    }, function () {
-                        location.hash = search.redirect ? decodeURIComponent(search.redirect) : '/';
-                    });
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/admin.js" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.use(['form', 'layer','jquery'], function () {
+        var form = layui.form,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //监听提交
+        form.on('submit(login)', function (fromdata) {
+            JqueryLayMsg(
+                "/login",
+                fromdata.field,
+                "post",
+                null,
+                function () {
+                    $(".captcha-img").trigger("click")
                 }
+            );
+            return false;
+        });
+
+        //监听提交
+        form.on('submit(logout)', function (fromdata) {
+            layer.confirm('是否确认退出？', {
+                btn: ['确认', '取消'] //可以无限个按钮
+            }, function(index, layero){
+                JqueryLayMsg(
+                    "/logout",
+                    "",
+                    "post"
+                );
+            }, function(index){
+                layer.closeAll()
             });
+            return false;
         });
     });
 </script>
 </body>
-
 </html>
+
+
+
