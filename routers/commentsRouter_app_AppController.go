@@ -16,6 +16,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:IndexController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:IndexController"],
+		beego.ControllerComments{
+			Method:           "Main",
+			Router:           `/main`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"],
 		beego.ControllerComments{
 			Method:           "Login",

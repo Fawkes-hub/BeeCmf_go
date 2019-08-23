@@ -25,7 +25,7 @@ func init() {
 
 // @router /login [get]
 func (c *LoginController) Login() {
-	c.TplName = "app/login.html"
+	c.TplName = "app/views/user/login.html"
 }
 
 // @router /login [post]

@@ -19,22 +19,12 @@ type NextPreparer interface {
 
 //控制器的所有基类 预处理
 func (base *AppBaseController) Prepare() {
-	//base.Data["Path"] = base.Ctx.Request.RequestURI
 	////检测当前用户有已经登录
-	//user, err := base.GetSession(SESSION_USER_KEY).(models.User)
-	//base.IsLogin = false
-	//if err {
-	//	base.User = user
-	//	base.Data["User"] = user
-	//	base.IsLogin = true
-	//}
-	//base.Data["IsLogin"] = base.IsLogin
-
 	isLogin, _ := base._checkLogin()
 	if isLogin == false {
 		controller, _ := base.GetControllerAndAction()
 		if controller != "LoginController" {
-			base.Redirect("/login", 302)
+			//base.Redirect("/login", 302)
 		}
 	}
 	//判断下级的controller是否实现了当前方法，如果实现了，就进行调用当前方法

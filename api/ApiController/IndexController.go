@@ -9,5 +9,5 @@ type IndexController struct {
 // @router /api/ [get]
 func (c *IndexController) Index() {
 	logs.Info("打印一下 看看成果已否111111")
-	c.TplName = "app/index.html"
+	c.TplName = "api/index.html"
 }
