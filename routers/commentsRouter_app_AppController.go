@@ -16,7 +16,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"],
+	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"],
 		beego.ControllerComments{
 			Method:           "Login",
 			Router:           `/login`,
@@ -25,7 +25,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"],
+	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:LoginController"],
 		beego.ControllerComments{
 			Method:           "LoginPost",
 			Router:           `/login`,

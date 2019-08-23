@@ -8,6 +8,7 @@ import (
 
 func init() {
 	//后台的路由
+	beego.Include(&AppController.LoginController{})
 	beego.Include(&AppController.IndexController{})
 	beego.Include(&AppController.UserController{})
 
