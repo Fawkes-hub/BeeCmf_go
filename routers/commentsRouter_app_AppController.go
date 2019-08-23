@@ -43,6 +43,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:MenuController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:MenuController"],
+		beego.ControllerComments{
+			Method:           "Get",
+			Router:           `/menu`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"] = append(beego.GlobalControllerRouter["github.com/BeeCmf/app/AppController:UserController"],
 		beego.ControllerComments{
 			Method:           "User",

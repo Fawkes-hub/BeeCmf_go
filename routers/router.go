@@ -10,6 +10,7 @@ func init() {
 	//后台的路由
 	beego.Include(&AppController.LoginController{})
 	beego.Include(&AppController.IndexController{})
+	beego.Include(&AppController.MenuController{})
 	beego.Include(&AppController.UserController{})
 
 	//前台的路由
