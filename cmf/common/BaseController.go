@@ -1,10 +1,40 @@
 package common
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"strings"
+)
 
 //控制器的后台基础
 type BaseController struct {
 	beego.Controller
+	controllerName string
+	actionName     string
+	//user           *models.
+	//userId         int
+}
+
+//前期准备
+func (c *BaseController) Prepare() {
+	//c.pageSize = 20
+	controllerName, actionName := c.GetControllerAndAction()
+	c.controllerName = strings.ToLower(controllerName[0 : len(controllerName)-10])
+	c.actionName = strings.ToLower(actionName)
+	c.Data["version"] = beego.AppConfig.String("version")
+	c.Data["siteName"] = beego.AppConfig.String("site.name")
+	c.Data["curRoute"] = c.controllerName + "." + c.actionName
+	c.Data["curController"] = c.controllerName
+	c.Data["curAction"] = c.actionName
+	// noAuth := "ajaxsave/ajaxdel/table/loginin/loginout/getnodes/start"
+	// isNoAuth := strings.Contains(noAuth, c.actionName)
+	//fmt.Println(c.controllerName)
+	//if (strings.Compare(c.controllerName, "apidoc")) != 0 {
+	//	c.auth()
+	//}
+	//
+	//c.Data["loginUserId"] = c.userId
+	//c.Data["loginUserName"] = c.userName
 }
 
 //预设定的返回信息
@@ -17,6 +47,9 @@ type ResultJson struct {
 
 //错误的返回信息
 func (c *BaseController) Abort500(msg string, url string) {
+	if msg == "" {
+		msg = "操作失败"
+	}
 	mystruct := &ResultJson{
 		Code: 500,
 		Msg:  msg,
@@ -34,18 +67,42 @@ func (c *BaseController) Abort500(msg string, url string) {
 }
 
 //正确的返回信息
-func (c *BaseController) Abort200(data interface{}, url string) {
+func (c *BaseController) Abort200(data interface{}, msg string, url string) {
+	if msg == "" {
+		msg = "操作成功"
+	}
 	mystruct := &ResultJson{
 		Code: 200,
 		Data: data,
 		Url:  url,
-		Msg:  "操作成功",
+		Msg:  msg,
 	}
 	c.Data["json"] = &mystruct
 	c.ServeJSON()
+	c.StopRun()
+	return
 }
 
 //返回模板的默认方法
-func (c *BaseController) Display() {
-	c.TplName = "reg.html"
+func (c *BaseController) Display(tpl ...string) {
+	//判断当前控制器与方法名是什么然后再直接跳转相对于的目录名
+	var tplname string
+	if len(tpl) > 0 {
+		tplname = strings.Join([]string{tpl[0], "html"}, ".")
+	} else {
+		tplname = c.controllerName + "/" + c.actionName + ".html"
+	}
+	logs.Info("当前查看的文件路径地址：", tplname)
+	//c.Layout = "public/layout.html"
+	c.TplName = tplname
+}
+
+// 是否POST提交
+func (c *BaseController) IsPost() bool {
+	return c.Ctx.Request.Method == "POST"
+}
+
+// 是否GET访问提交
+func (c *BaseController) IsGet() bool {
+	return c.Ctx.Request.Method == "GET"
 }

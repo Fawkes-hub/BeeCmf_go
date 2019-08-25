@@ -10,10 +10,14 @@ type MenuController struct {
 }
 
 //查询菜单列表
-// @router /menu [get]
-func (c *MenuController) Get() {
+func (c *MenuController) Index() {
 	if c.IsAjax() {
-		_, _ = AppService.GetMenuLists(1)
+		lists, err := AppService.GetMenuLists(1)
+		if err != nil {
+			c.Abort500(err.Error(), "/")
+		}
+		logs.Info("最终返回的数据", lists)
+		c.Abort200(lists, "", "")
 	}
 	logs.Info("请求法师不正确")
 }

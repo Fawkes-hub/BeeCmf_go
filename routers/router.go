@@ -15,13 +15,10 @@ func init() {
 
 	//前台的路由
 	beego.Include(&ApiController.IndexController{})
-	//
-	////前台请求的api接口
-	//ns := beego.NewNamespace("api",
-	//	beego.NSInclude(
-	//		&ApiController.IndexController{},
-	//	),
-	//)
-	////注册 namespace
-	//beego.AddNamespace(ns)
+
+	// 默认登录
+	beego.Router("/login", &AppController.LoginController{}, "*:Login")
+
+	beego.AutoRouter(&AppController.MenuController{})
+
 }

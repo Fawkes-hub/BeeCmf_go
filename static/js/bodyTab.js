@@ -26,6 +26,7 @@ layui.define(["element", "jquery"], function (exports) {
             data = strData;
         }
         var ulHtml = '';
+        console.log(strData);
         for (var i = 0; i < data.length; i++) {
             if (data[i].spread || data[i].spread == undefined) {
                 ulHtml += '<li class="layui-nav-item layui-nav-itemed">';
