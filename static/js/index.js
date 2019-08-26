@@ -1,155 +1,423 @@
-var $, tab, dataStr, layer;
-layui.config({
-    base: "/static/js/"
-}).extend({
-    "bodyTab": "bodyTab"
-})
-layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery'], function () {
-    var form = layui.form,
-        element = layui.element;
-    $ = layui.$;
-    layer = parent.layer === undefined ? layui.layer : top.layer;
-    tab = layui.bodyTab({
-        openTabNum: "50",  //最大可打开窗口数量
-        url: "/menu/index" //获取菜单json地址
-    });
-    console.log(tab)
-    //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-    function getData(json) {
-        console.log(tab)
-        $.getJSON(tab.tabConfig.url, function (data) {
-            if (json == "contentManagement") {
-                dataStr = data.contentManagement;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "memberCenter") {
-                dataStr = data.memberCenter;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "systemeSttings") {
-                dataStr = data.systemeSttings;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "seraphApi") {
-                dataStr = data.seraphApi;
-                //重新渲染左侧菜单
-                tab.render();
+var bodyTab;
+
+$(function () {
+
+    //config的设置是全局的
+    layui.config({
+        base: '/static/plugins/layui-extend/' //这是你存放拓展模块的根目录
+    }).use(['bodyTab', 'form', 'colorpicker'], function () {
+
+        var colorpicker = layui.colorpicker;
+        var element = layui.element;
+        var form = layui.form;
+        var layer = layui.layer;
+        bodyTab = layui.bodyTab;
+
+        bodyTab.set({
+            openTabNum: "50",  //最大可打开窗口数量
+            tabFilter: "bodyTab",  //layui的element模块事件过滤器
+            ajaxSettings: {  //ajax参数，与jquery.ajax一致
+                // url: "./services/data/menu.json",
+                url: "/menu/index",
+                type: 'get'
             }
-        })
-    }
+        });
 
-    //页面加载时判断左侧菜单是否显示
-    //通过顶部菜单获取左侧菜单
-    $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function () {
-        if ($(this).parents(".mobileTopLevelMenus").length != "0") {
-            $(".topLevelMenus li").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
-        } else {
-            $(".mobileTopLevelMenus dd").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
-        }
-        $(".layui-layout-admin").removeClass("showMenu");
-        $("body").addClass("site-mobile");
-        getData($(this).data("menu"));
-        //渲染顶部窗口
-        tab.tabMove();
-    })
+        skins();
+        //更换皮肤
+        $(".changeSkin").click(function () {
+            layer.open({
+                title: "更换皮肤",
+                area: ["450px", "210px"],
+                type: "1",
+                content: '<div class="skins_box">' +
+                    '<form class="layui-form">' +
+                    '<div class="layui-form-item">' +
+                    '<input type="radio" name="skin" value="默认" title="默认" lay-filter="default" checked="">' +
+                    '<input type="radio" name="skin" value="橙色" title="橙色" lay-filter="orange">' +
+                    '<input type="radio" name="skin" value="蓝色" title="蓝色" lay-filter="blue">' +
+                    '<input type="radio" name="skin" value="自定义" title="自定义" lay-filter="custom">' +
+                    '<div class="skinCustom">' +
+                    '<input type="text" class="layui-input topColor" name="topSkin" placeholder="顶部颜色" /><span id="topSkin-form" ></span>' +
+                    '<input type="text" class="layui-input leftColor" name="leftSkin" placeholder="左侧颜色" /><span id="leftSkin-form" ></span>' +
+                    '<input type="text" class="layui-input menuColor layui-hide" name="btnSkin" placeholder="顶部菜单按钮" /><span id="btnSkin-form" ></span>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="layui-form-item skinBtn">' +
+                    '<a href="javascript:void(0)" class="layui-btn layui-btn-small layui-btn-normal" lay-submit="" lay-filter="changeSkin">确定更换</a>' +
+                    '<a href="javascript:void(0)" class="layui-btn layui-btn-small layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">我再想想</a>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>',
+                success: function (index, layero) {
 
-    //隐藏左侧导航
-    $(".hideMenu").click(function () {
-        if ($(".topLevelMenus li.layui-this a").data("url")) {
-            layer.msg("此栏目状态下左侧菜单不可展开");  //主要为了避免左侧显示的内容与顶部菜单不匹配
-            return false;
-        }
-        $(".layui-layout-admin").toggleClass("showMenu");
-        //渲染顶部窗口
-        tab.tabMove();
-    })
+                    colorpicker.render({
+                        elem: '#topSkin-form'
+                        , color: '#000'
+                        , done: function (color) {
+                            $('.topColor,.menuColor').val(color);
+                            $('.topColor,.menuColor').blur();
+                        }
+                        , alpha: true
+                        , predefine: true
+                    });
 
-    //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-    getData("contentManagement");
+                    colorpicker.render({
+                        elem: '#leftSkin-form'
+                        , color: '#000'
+                        , done: function (color) {
+                            $('.leftColor').val(color);
+                            $('.leftColor').blur();
+                        }
+                        , alpha: true
+                        , predefine: true
+                    });
 
-    //手机设备的简单适配
-    $('.site-tree-mobile').on('click', function () {
-        $('body').addClass('site-mobile');
-    });
-    $('.site-mobile-shade').on('click', function () {
-        $('body').removeClass('site-mobile');
-    });
 
-    // 添加新窗口
-    $("body").on("click", ".layui-nav .layui-nav-item a:not('.mobileTopLevelMenus .layui-nav-item a')", function () {
-        //如果不存在子级
-        if ($(this).siblings().length == 0) {
-            addTab($(this));
-            $('body').removeClass('site-mobile');  //移动端点击菜单关闭菜单层
-        }
-        $(this).parent("li").siblings().removeClass("layui-nav-itemed");
-    })
-
-    //清除缓存
-    $(".clearCache").click(function () {
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-        var index = layer.msg('清除缓存中，请稍候', {icon: 16, time: false, shade: 0.8});
-        setTimeout(function () {
-            layer.close(index);
-            layer.msg("缓存清除成功！");
-        }, 1000);
-    })
-
-    //刷新后还原打开的窗口
-    if (cacheStr == "true") {
-        if (window.sessionStorage.getItem("menu") != null) {
-            menu = JSON.parse(window.sessionStorage.getItem("menu"));
-            curmenu = window.sessionStorage.getItem("curmenu");
-            var openTitle = '';
-            for (var i = 0; i < menu.length; i++) {
-                openTitle = '';
-                if (menu[i].icon) {
-                    if (menu[i].icon.split("-")[0] == 'icon') {
-                        openTitle += '<i class="seraph ' + menu[i].icon + '"></i>';
-                    } else {
-                        openTitle += '<i class="layui-icon">' + menu[i].icon + '</i>';
+                    var skin = window.localStorage.getItem("skin");
+                    if (window.localStorage.getItem("skinValue")) {
+                        $(".skins_box input[value=" + window.localStorage.getItem("skinValue") + "]").attr("checked", "checked");
                     }
-                }
-                openTitle += '<cite>' + menu[i].title + '</cite>';
-                openTitle += '<i class="layui-icon layui-unselect layui-tab-close" data-id="' + menu[i].layId + '">&#x1006;</i>';
-                element.tabAdd("bodyTab", {
-                    title: openTitle,
-                    content: "<iframe src='" + menu[i].href + "' data-id='" + menu[i].layId + "'></frame>",
-                    id: menu[i].layId
-                })
-                //定位到刷新前的窗口
-                if (curmenu != "undefined") {
-                    if (curmenu == '' || curmenu == "null") {  //定位到后台首页
-                        element.tabChange("bodyTab", '');
-                    } else if (JSON.parse(curmenu).title == menu[i].title) {  //定位到刷新前的页面
-                        element.tabChange("bodyTab", menu[i].layId);
+                    ;
+                    if ($(".skins_box input[value=自定义]").attr("checked")) {
+                        $(".skinCustom").css("visibility", "inherit");
+                        $(".topColor").val(skin.split(',')[0]);
+                        $(".leftColor").val(skin.split(',')[1]);
+                        $(".menuColor").val(skin.split(',')[2]);
                     }
-                } else {
-                    element.tabChange("bodyTab", menu[menu.length - 1].layId);
+                    ;
+                    form.render();
+                    $(".skins_box").removeClass("layui-hide");
+                    $(".skins_box .layui-form-radio").on("click", function () {
+                        var skinColor;
+                        if ($(this).find("div").text() == "橙色") {
+                            skinColor = "orange";
+                        } else if ($(this).find("div").text() == "蓝色") {
+                            skinColor = "blue";
+                        } else if ($(this).find("div").text() == "默认") {
+                            skinColor = "";
+                        }
+                        if ($(this).find("div").text() != "自定义") {
+                            $(".topColor,.leftColor,.menuColor").val('');
+                            $("body").removeAttr("class").addClass("main_body " + skinColor + "");
+                            $(".skinCustom").removeAttr("style");
+                            $(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+                        } else {
+                            $(".skinCustom").css("visibility", "inherit");
+                        }
+                    })
+                    var skinStr, skinColor;
+                    $(".topColor").focus(function () {
+                        layer.open({
+                            type: 4,
+                            content: ['请输入[十六进制颜色码]或者颜色的[英文单词]', this]
+                            , shade: 0
+                            , closeBtn: 0
+                            , time: 5000
+                        });
+                    }).blur(function () {
+                        layer.closeAll('tips');
+                        $(".layui-layout-admin .layui-header").css("cssText", "background-color:" + $(this).val() + " !important");
+                        $(".hideMenu").css("cssText", "background-color:" + $(this).val() + " !important");
+                    });
+                    $(".leftColor").focus(function () {
+                        layer.open({
+                            type: 4,
+                            content: ['请输入[十六进制颜色码]或者颜色的[英文单词]', this]
+                            , shade: 0
+                            , closeBtn: 0
+                            , time: 5000
+                        });
+                    }).blur(function () {
+                        layer.closeAll('tips');
+                        $(".layui-bg-black").css("cssText", "background-color:" + $(this).val() + " !important");
+                    });
+
+                    form.on("submit(changeSkin)", function (data) {
+                        if (data.field.skin != "自定义") {
+                            if (data.field.skin == "橙色") {
+                                skinColor = "orange";
+                            } else if (data.field.skin == "蓝色") {
+                                skinColor = "blue";
+                            } else if (data.field.skin == "默认") {
+                                skinColor = "";
+                            }
+                            window.localStorage.setItem("skin", skinColor);
+                        } else {
+                            skinStr = $(".topColor").val() + ',' + $(".leftColor").val() + ',' + $(".menuColor").val();
+                            window.localStorage.setItem("skin", skinStr);
+                            $("body").removeAttr("class").addClass("main_body");
+                        }
+                        window.localStorage.setItem("skinValue", data.field.skin);
+                        layer.closeAll("page");
+                    });
+                    form.on("submit(noChangeSkin)", function () {
+                        $("body").removeAttr("class").addClass("main_body " + window.localStorage.getItem("skin") + "");
+                        $(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+                        skins();
+                        layer.closeAll("page");
+                    });
+                },
+                cancel: function () {
+                    $("body").removeAttr("class").addClass("main_body " + window.localStorage.getItem("skin") + "");
+                    $(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+                    skins();
                 }
-            }
+            })
+        });
+
+        //退出
+        $(".signOut").click(function (event) {
+            event.preventDefault();
+            layui.layer.load(2, {
+                shade: [0.9, '#FFF'],
+                content: '<div style="width:100px;line-height:32px;text-align:right;">正在退出...</div>'
+            });
+            top.sessionStorage.clear();
+            //延迟一下使得用户能直观的感受到系统做了什么不得了的事（一本正经）
+            var _this = this;
+            setTimeout(function () {
+                location.replace($(_this).attr("href"));
+            }, "100");
+        });
+
+        //隐藏左侧导航
+        $(".hideMenu").click(function () {
+            $(".layui-layout-admin").toggleClass("showMenu");
             //渲染顶部窗口
-            tab.tabMove();
-        }
-    } else {
-        window.sessionStorage.removeItem("menu");
-        window.sessionStorage.removeItem("curmenu");
-    }
-})
+            bodyTab.tabMove();
+            //layer.msg("如果页面显示不正常可在右方的页面操作里点击刷新当前页哦~", { time: 900 });
+        });
 
-//打开新窗口
-function addTab(_this) {
-    tab.tabAdd(_this);
+        // 解锁
+        $(document).on("click", "#unlock", function () {
+
+            var thisEle = this;
+
+            if ($(thisEle).siblings(".admin-header-lock-input").val() == '') {
+                layer.msg("请输入解锁密码！", {anim: 10, icon: 0, zIndex: 19991014});
+                $(thisEle).siblings(".admin-header-lock-input").focus();
+            } else {
+                var user = {
+                    userAcc: $('#lockUserName').text(),
+                    passwd: $(thisEle).siblings(".admin-header-lock-input").val()
+                }
+
+                $(thisEle).addClass("layui-btn-disabled").prop("disabled", true).text("解锁中…");
+
+
+                setTimeout(function () {
+
+                    if (user.userAcc === 'admin' && user.passwd === '123') {
+
+                        window.localStorage.setItem("lockcms", false);
+                        $(thisEle).siblings(".admin-header-lock-input").val('');
+                        layer.closeAll("page");
+                        layer.msg("解锁成功.", {anim: 10, icon: 1, zIndex: 19991014});
+                        //如果没有菜单则刷新
+                        if ($('.navBar').html() == '') {
+                            //从缓存取页面刷新
+                            window.location.reload(false);
+                            //从服务器重新取页面刷新
+                            window.location.reload(true);
+                            //跳转式刷新
+                            window.location.href = window.location.href;
+                        }
+
+                    } else {
+                        layer.msg('解锁失败,请检查密码是否正确。', {anim: 10, icon: 0, zIndex: 19991014});
+                        $(thisEle).siblings(".admin-header-lock-input").val('').focus();
+                    }
+
+                    $(thisEle).removeClass("layui-btn-disabled").prop("disabled", false).text("解锁");
+
+                }, "1000");
+
+            }
+        });
+
+        //锁屏
+        $(".lockcms").on("click", function () {
+            window.localStorage.setItem("lockcms", true);
+            lockPage();
+        });
+
+        //锁屏页面回车
+        $(document).on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                $("#unlock").click();
+            }
+        });
+
+        // 判断是否显示锁屏
+        if (window.localStorage.getItem("lockcms") == "true") {
+            lockPage();
+        }
+
+        //弹出公告
+        $(".showNotice").on("click", function () {
+            showNotice();
+        });
+
+        //手机设备的简单适配
+        $('.site-tree-mobile').on('click', function () {
+            $('body').addClass('site-mobile');
+        });
+        $('.site-mobile-shade').on('click', function () {
+            $('body').removeClass('site-mobile');
+        });
+
+        //刷新当前
+        $(".refresh").on("click", function () {
+            //获取当前打开的元素
+            var showElement = $(".clildFrame .layui-tab-item.layui-show").find("iframe")[0];
+            //手动设置一下src刷新
+            showElement.src = showElement.src;
+            //从缓存取页面刷新
+            showElement.contentWindow.location.reload(false);
+            //从服务器重新取页面刷新
+            showElement.contentWindow.location.reload(true);
+            //跳转式刷新
+            showElement.contentWindow.location.href = showElement.src;
+        });
+
+        //监听切换tab设置当前选中tab
+        $(document).on("click", ".top_tab li", function () {
+            bodyTab.monitorSwitchTab(this);
+        });
+
+        //删除tab，tab关闭 监听
+        $(document).on("click", ".top_tab li i.layui-tab-close", function () {
+            bodyTab.monitorCloseTab(this);
+        });
+
+        // 添加新窗口
+        $(document).on("click", ".layui-nav .layui-nav-item a", function (event) {
+            event.preventDefault();
+            //如果不存在子级
+            if ($(this).siblings().length == 0) {
+                bodyTab.tabAdd($(this));
+                $('body').removeClass('site-mobile');  //移动端点击菜单关闭菜单层
+            }
+            $(this).parent("li").siblings().removeClass("layui-nav-itemed");
+        });
+
+        //双击时刷新当前窗口
+        $(document).on("dblclick", ".layui-nav .layui-nav-item a", function (event) {
+            event.preventDefault();
+            //如果不存在子级
+            if ($(this).siblings().length == 0) {
+                $(".refresh")[0].click();
+            }
+        });
+
+        //判断是否是刷新来的tab，是的话刷新当前页面
+        element.on('tab(bodyTab)', function (data) {
+            var notNewTabEle = $(this).find("[layuiTabTypeOpen='notNewTab']");
+            if (notNewTabEle[0] != undefined) {
+                notNewTabEle.removeAttr('layuiTabTypeOpen');
+                $(".refresh")[0].click();
+            }
+
+            //切换tab时选中左侧菜单
+            bodyTab.selectedMenu($(this).attr('lay-id'));
+        });
+
+        //关闭其他
+        $(".closePageOther").on("click", function () {
+            bodyTab.CloseOtherTab();
+        });
+        //关闭全部
+        $(".closePageAll").on("click", function () {
+            bodyTab.CloseAllTab();
+        });
+
+    });//layui.use的结尾
+
+});//jquery的结尾
+
+//更换皮肤
+function skins() {
+    var skin = window.localStorage.getItem("skin");
+    if (skin) {  //如果更换过皮肤
+        if (window.localStorage.getItem("skinValue") != "自定义") {
+            $("body").addClass(window.localStorage.getItem("skin"));
+        } else {
+            $(".layui-layout-admin .layui-header").css("cssText", "background-color:" + skin.split(',')[0] + " !important");
+            $(".layui-bg-black").css("cssText", "background-color:" + skin.split(',')[1] + " !important");
+            $(".hideMenu").css("cssText", "background-color:" + skin.split(',')[2] + " !important");
+        }
+    }
 }
 
-//图片管理弹窗
-function showImg() {
-    $.getJSON('json/images.json', function (json) {
-        var res = json;
-        layer.photos({
-            photos: res,
-            anim: 5
-        });
+//锁屏
+function lockPage() {
+    top.layer.closeAll();
+    layer.closeAll();
+    top.layer.open({
+        title: false,
+        type: 1,
+        content: '	<div class="admin-header-lock" id="lock-box">' +
+            '<div class="admin-header-lock-img"><img src="' + localStorage.getItem("userIconAs") + '"  onerror="javascript:this.src=\'images/face.jpg\'" /></div>' +
+            '<div class="admin-header-lock-name" id="lockUserName">' + (localStorage.getItem("userNameAs") || 'admin') + '</div>' +
+            '<div class="input_btn">' +
+            '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />' +
+            '<button class="layui-btn layui-btn-normal" style="width: 80px;" id="unlock">解锁</button>' +
+            '</div>' +
+            '<p>页面已锁定,请输入登陆密码解锁.</p>' +
+            '</div>',
+        closeBtn: 0,
+        shade: 0.9,
+        zIndex: 19891020
+    })
+}
+
+
+//公告层
+function showNotice() {
+    layer.open({
+        type: 1,
+        title: "系统公告",
+        closeBtn: false,
+        area: '310px',
+        shade: 0.8,
+        id: 'LAY_layuipro',
+        btn: ['我知道了'],
+        moveType: 1,
+        content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; text-indent:2em;border-bottom:1px solid #e2e2e2;"><p>基于layui开发的一套纯前端后台框架。致力于简洁代码和拿来即用。欢迎在<a href="https://gitee.com/cluyun/LayuiCMSluyun" target="_blank">码云</a>Issues中提建议和bug。</p><p>非常感谢马哥的<a href="https://gitee.com/layuicms/layuicms" target="_blank">layuicms</a>，我的成长从他那里开始。</p></div>',
+        success: function (layero) {
+            var btn = layero.find('.layui-layer-btn');
+            btn.css('text-align', 'center');
+            btn.on("click", function () {
+                window.sessionStorage.setItem("showNotice", "true");
+            });
+        },
+        yes: function (index, layero) {
+            layer.close(index);
+            if ($(window).width() > 432) {  //如果页面宽度不足以显示顶部“系统公告”按钮，则不提示
+
+                layer.tips('系统公告躲在了这里', '#showNotice', {
+                    tips: 3
+                });
+
+            }
+        }
     });
+}
+
+/**
+ * 打开新tab
+ * @param {object} item 菜单对象
+ *  {
+ *    "mid": "菜单唯一标识(为空时内部会生成guid作为mid使用)",
+ *    "title": "菜单名称",
+ *    "icon": "菜单图标",
+ *    "href": "菜单跳转地址"
+ *  }
+ */
+function openNewTab(item) {
+    var html = '<a title="' + item.title + '" data-layid="' + (item.mid || '') + '" href="' + item.href + '" data-url="' + item.href + '">';
+    html += bodyTab.convertIconHtml(item.icon);
+    html += '<cite>' + item.title + '</cite></a>';
+    bodyTab.tabAdd($(html));
 }

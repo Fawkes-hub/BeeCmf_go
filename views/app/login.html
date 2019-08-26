@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>LayuiCMSluyun-登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+
+    <link href="plugins/layui/css/layui.css" rel="stylesheet"/>
+    <link href="css/layadmin.css" rel="stylesheet"/>
+    <link href="css/laylogin.css" rel="stylesheet"/>
+
+
+    <link href="css/layloginLuyun.css" rel="stylesheet"/>
+</head>
+
+<body class="layui-layout-body">
+<script src="plugins/jquery.min.js"></script>
+<script src="plugins/layui/layui.js"></script>
+<script src="js/javascript.util.js"></script>
+
+
+<div id="LAY_app">
+    <div class="layadmin-user-login" id="LAY-user-login" style="display: none;">
+
+        <div class="layadmin-user-login-main">
+            <div class="layadmin-user-login-box layadmin-user-login-header">
+                <h2>登录</h2>
+                <p>LayuiCMSluyun</p>
+            </div>
+            <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username"
+                           for="LAY-user-login-username"></label>
+                    <input value="admin" type="text" name="username" id="LAY-user-login-username"
+                           lay-verify="username" placeholder="账号" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                           for="LAY-user-login-password"></label>
+                    <input value="123" type="password" name="password" id="LAY-user-login-password"
+                           lay-verify="password" placeholder="密码" class="layui-input">
+                    <label id="showPasswordIcon">
+                        <i class="layui-icon layui-icon-menu-fill"></i>
+                    </label>
+                </div>
+                <div class="layui-form-item" style="display: none">
+                    <input type="checkbox" name="remember" lay-skin="primary" title="记住密码">
+                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>记住密码</span>
+                        <i class="layui-icon"></i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" id="submitUser" lay-submit=""
+                            lay-filter="LAY-user-login-submit">
+                        登 入
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-trans layadmin-user-login-footer beijtoum">
+            <p style="color: #fff">&copy; 2019 <a style="color: #fff" href="https://gitee.com/cluyun"
+                                                  target="_blank">碌云</a></p>
+        </div>
+    </div>
+</div>
+<script>
+
+    (function () {
+        if (getIsWeb() === false) {
+            alert('建议在web服务容器中打开此网页，如iis、Apache Tomcat、Nginx、node server等。当前状态下被限制了很多功能。');
+        }
+
+        pageKeepTop();
+    }());
+
+    $(function () {
+
+        //首次进入页面让第一个文本框获得焦点,这样用户直接回车即可登录。
+        $('[name="username"]').focus();
+
+
+        var showPasswordFun = function () {
+            $(this).html('<i class="layui-icon layui-icon-circle"></i>');
+            $('[name="password"]').attr('type', 'text');
+        }
+        var hidePasswordFun = function () {
+            $(this).html('<i class="layui-icon layui-icon-menu-fill"></i>');
+            $('[name="password"]').attr('type', 'password');
+        }
+
+        //按住密码框小圆点可显示密码(支持移动端和PC端)
+        $('#showPasswordIcon').on("mousedown", showPasswordFun).on('mouseup', hidePasswordFun).on('touchstart', showPasswordFun).on('touchend', hidePasswordFun);
+
+        layui.use(['form', 'layer'], function () {
+            var layer = layui.layer;
+            var form = layui.form;
+
+            //自定义验证规则
+            form.verify({
+                username: function (value) {
+                    if (value.length < 1) {
+                        return '请输入账号';
+                    }
+                }
+                , password: function (value) {
+                    if (value.length < 1) {
+                        return '请输入密码';
+                    }
+                }
+            });
+
+            //提交
+            form.on('submit(LAY-user-login-submit)', function (obj) {
+                var data = obj.field;
+                var user = {
+                    userAcc: data.username,
+                    passwd: data.password
+                }
+
+                $("#submitUser").addClass("layui-btn-disabled").prop("disabled", true).text("登录中…");
+
+
+                if (user.userAcc === 'admin' && user.passwd === '123') {
+                    setTimeout("top.location.replace('index.html')", "1000");
+                } else {
+                    layer.msg('用户名或密码错误', {anim: 10, icon: 0});
+                    $("#submitUser").removeClass("layui-btn-disabled").prop("disabled", false).text("登 入");
+                }
+
+
+                return false;
+            });
+
+
+        });
+
+
+        $(document).on("keyup", "input", function (event) {
+            if (event.keyCode == 13) {
+                $('#submitUser').click();
+            }
+        });
+
+
+    });
+</script>
+</body>
+
+</html>

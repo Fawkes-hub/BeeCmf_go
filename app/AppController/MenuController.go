@@ -16,7 +16,6 @@ func (c *MenuController) Index() {
 		if err != nil {
 			c.Abort500(err.Error(), "/")
 		}
-		logs.Info("最终返回的数据", lists)
 		c.Abort200(lists, "", "")
 	}
 	logs.Info("请求法师不正确")

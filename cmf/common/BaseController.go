@@ -15,6 +15,11 @@ type BaseController struct {
 	//userId         int
 }
 
+//约定：如果子控制器中存在了NextController方法，就实现了当前接口
+type NextPreparer interface {
+	NextPreparer()
+}
+
 //前期准备
 func (c *BaseController) Prepare() {
 	//c.pageSize = 20
@@ -35,6 +40,10 @@ func (c *BaseController) Prepare() {
 	//
 	//c.Data["loginUserId"] = c.userId
 	//c.Data["loginUserName"] = c.userName
+	//判断下级的controller是否实现了当前方法，如果实现了，就进行调用当前方法
+	if app, ok := c.AppController.(NextPreparer); ok {
+		app.NextPreparer()
+	}
 }
 
 //预设定的返回信息
@@ -78,7 +87,13 @@ func (c *BaseController) Abort200(data interface{}, msg string, url string) {
 		Msg:  msg,
 	}
 	c.Data["json"] = &mystruct
-	c.ServeJSON()
+	if c.IsAjax() {
+		c.ServeJSON()
+	} else {
+		c.Data["Content"] = msg
+		c.Abort("200")
+		c.Redirect(url, 200)
+	}
 	c.StopRun()
 	return
 }
@@ -92,9 +107,14 @@ func (c *BaseController) Display(tpl ...string) {
 	} else {
 		tplname = c.controllerName + "/" + c.actionName + ".html"
 	}
+	cont, act := c.GetControllerAndAction()
+	logs.Info("传入的地址数据：", len(tpl))
+	logs.Info("传入的地址数据：", tpl)
+	logs.Info("当前请求的控制器112：", cont, act)
+	logs.Info("当前请求的控制器：", c.controllerName+c.actionName)
 	logs.Info("当前查看的文件路径地址：", tplname)
 	//c.Layout = "public/layout.html"
-	c.TplName = tplname
+	c.TplName = "app/" + tplname
 }
 
 // 是否POST提交

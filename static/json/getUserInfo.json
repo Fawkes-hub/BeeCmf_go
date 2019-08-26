@@ -1,0 +1,22 @@
+{
+  "code": 200,
+  "token": "taVJM3Ba3lBTr/LSsoiAsv+Qd2Qt8j4d",
+  "msg": null,
+  "data": [
+    {
+      "user_acc": "admin",
+      "user_name": "admin",
+      "passwd": "c3284d0f94606de1fd2af172aba15bf3",
+      "icon": "/images/face.jpg",
+      "mobile": "13474824061",
+      "tel_phone": "4000820099",
+      "e_mail": "1567174Q@qq.com",
+      "create_time": "2017-02-08T00:00:00",
+      "create_user": "system",
+      "is_lock": 1,
+      "roleNames": [
+        "超级管理员(不受权限模块限制,永远拥有所有权限.)"
+      ]
+    }
+  ]
+}

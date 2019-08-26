@@ -1,0 +1,40 @@
+{
+  "code": 200,
+  "token": "taVJM3Ba3lD/YmU19m1VLtIH6oNNji/F",
+  "msg": null,
+  "statusCode": null,
+  "data": [
+    {
+      "name": "todo_ocrerr",
+      "value": "0"
+    },
+    {
+      "name": "todo_conflict",
+      "value": "1"
+    },
+    {
+      "name": "todo_checkerr",
+      "value": "0"
+    },
+    {
+      "name": "todo_matcherr",
+      "value": "1"
+    },
+    {
+      "name": "todo_posterr",
+      "value": "1"
+    },
+    {
+      "name": "no_match_bill",
+      "value": "0"
+    },
+    {
+      "name": "todo_comp_null",
+      "value": "0"
+    },
+    {
+      "name": "todo_no_match",
+      "value": "2"
+    }
+  ]
+}

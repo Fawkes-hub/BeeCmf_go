@@ -18,6 +18,7 @@ func init() {
 
 	// 默认登录
 	beego.Router("/login", &AppController.LoginController{}, "*:Login")
+	beego.Router("/logout", &AppController.LoginController{}, "*:Logout")
 
 	beego.AutoRouter(&AppController.MenuController{})
 

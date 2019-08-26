@@ -26,9 +26,9 @@ func init() {
 func (c *LoginController) Login() {
 	if c.IsPost() {
 		//验证邮箱密码是否正确
-		if !cpt.VerifyReq(c.Ctx.Request) {
-			c.Abort500("验证码不正确", "")
-		}
+		//if !cpt.VerifyReq(c.Ctx.Request) {
+		//	c.Abort500("验证码不正确", "")
+		//}
 		valid := validation.Validation{}
 		valid.Required(c.GetString("username"), "login").Message("帐号必须填写")
 		valid.Required(c.GetString("password"), "password").Message("密码必须填写")
@@ -53,5 +53,11 @@ func (c *LoginController) Login() {
 	} else {
 		c.Display()
 	}
+}
 
+//退出
+func (c *LoginController) Logout() {
+	//清除缓存
+	c.DelSession(SESSION_USER_KEY)
+	c.Display("login/login")
 }

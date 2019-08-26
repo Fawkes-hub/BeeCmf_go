@@ -1,0 +1,265 @@
+{
+  "code": 200,
+  "token": "taVJM3Ba3lD/YmU19m1VLj9BrBMs8CdS",
+  "msg": null,
+  "data": [
+    {
+      "mid": "home",
+      "title": "主页",
+      "icon": "&#xe68e;",
+      "href": "pages/main/main.html",
+      "children": []
+    },
+    {
+      "title": "网站管理",
+      "icon": "&#xe7ae;",
+      "href": "",
+      "children": [
+        {
+          "mid": "ColumnManagement",
+          "title": "栏目管理",
+          "icon": "",
+          "href": "pages/webAdmin/column.html",
+          "children": []
+        },
+        {
+          "mid": "ContentManagement",
+          "title": "内容管理",
+          "icon": "&#xe638;",
+          "href": "pages/webAdmin/content.html",
+          "children": []
+        },
+        {
+          "mid": "AdvertisingManagement",
+          "title": "广告管理",
+          "icon": "layui-icon-survey",
+          "href": "pages/webAdmin/advertisement.html",
+          "children": []
+        },
+        {
+          "title": "三级菜单",
+          "icon": "",
+          "href": "pages/webAdmin/advertisement.html",
+          "children": [
+            {
+              "title": "三级菜单之一",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html",
+              "children": []
+            },
+            {
+              "title": "三级菜单之二",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html",
+              "children": []
+            }
+          ]
+        },
+        {
+          "title": "支持无限极菜单",
+          "icon": "",
+          "href": "pages/webAdmin/advertisement.html",
+          "children": [
+            {
+              "title": "三级菜单之一2",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html",
+              "children": []
+            },
+            {
+              "title": "三级菜单之二2",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html",
+              "children": []
+            },
+            {
+              "title": "四级菜单2",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html",
+              "children": [
+                {
+                  "title": "四级菜单之 一",
+                  "icon": "",
+                  "href": "pages/webAdmin/advertisement.html",
+                  "children": []
+                },
+                {
+                  "title": "五级菜单",
+                  "icon": "",
+                  "href": "pages/webAdmin/advertisement.html",
+                  "children": [
+                    {
+                      "title": "五级菜单之 一",
+                      "icon": "",
+                      "href": "pages/webAdmin/advertisement.html",
+                      "children": []
+                    },
+                    {
+                      "title": "六级菜单",
+                      "icon": "",
+                      "href": "pages/webAdmin/advertisement.html",
+                      "children": [
+                        {
+                          "title": "六级菜单之 一",
+                          "icon": "",
+                          "href": "pages/webAdmin/advertisement.html",
+                          "children": []
+                        },
+                        {
+                          "title": "六级菜单之 二",
+                          "icon": "",
+                          "href": "pages/webAdmin/advertisement.html",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "支持菜单重名",
+          "icon": "",
+          "href": "pages/webAdmin/advertisement.html",
+          "children": [
+            {
+              "title": "重名菜单可使用",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html"
+            },
+            {
+              "title": "重名菜单可使用",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html"
+            },
+            {
+              "title": "重名菜单可使用",
+              "icon": "",
+              "href": "pages/webAdmin/advertisement.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "用户权限",
+      "icon": "&#xe672;",
+      "href": "",
+      "children": [
+        {
+          "mid": "UserManagement",
+          "title": "用户管理",
+          "icon": "&#xe612;",
+          "href": "pages/userRights/user.html",
+          "children": []
+        },
+        {
+          "mid": "PermissionSettings",
+          "title": "权限设置",
+          "icon": "&#xe60a;",
+          "href": "pages/userRights/power.html",
+          "children": []
+        },
+        {
+          "mid": "RoleManagement",
+          "title": "角色管理",
+          "icon": "&#xe613;",
+          "href": "pages/userRights/role.html",
+          "children": []
+        },
+        {
+          "title": "菜单管理",
+          "icon": "&#xe62a;",
+          "href": "pages/userRights/menu.html",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "系统设置",
+      "icon": "&#xe614;",
+      "href": "",
+      "children": [
+        {
+          "title": "基本信息",
+          "icon": "&#xe647;",
+          "href": "pages/sysSetup/basicData.html",
+          "children": []
+        },
+        {
+          "title": "数据清理",
+          "icon": "&#xe640;",
+          "href": "pages/sysSetup/dataClear.html",
+          "children": []
+        },
+        {
+          "title": "SEO优化",
+          "icon": "&#xe630;",
+          "href": "pages/sysSetup/seoOptimize.html",
+          "children": []
+        },
+        {
+          "title": "友情链接",
+          "icon": "&#xe62e;",
+          "href": "pages/sysSetup/friendshipLink.html",
+          "children": []
+        },
+        {
+          "title": "模板管理",
+          "icon": "&#xe663;",
+          "href": "pages/sysSetup/templateAdmin.html",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "报表",
+      "icon": "&#xe637;",
+      "href": "",
+      "children": [
+        {
+          "title": "用户统计",
+          "icon": "&#xe629;",
+          "href": "pages/reportForm/statistics.html",
+          "children": []
+        },
+        {
+          "title": "日志报表",
+          "icon": "&#xe62a;",
+          "href": "pages/reportForm/log.html",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "其他",
+      "icon": null,
+      "href": "",
+      "children": [
+        {
+          "title": "404-新页面跳转",
+          "icon": null,
+          "href": "pages/404.html",
+          "target": "_blank",
+          "children": []
+        },
+        {
+          "title": "登录-当前页跳转",
+          "icon": null,
+          "href": "login.html",
+          "target": "_self",
+          "children": []
+        },
+        {
+          "title": "登录2-当前页跳转",
+          "icon": null,
+          "href": "pages/login/login2.html",
+          "target": "_top",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+/**
+后台菜单的服务层
+*/
 package AppService
 
 import (
@@ -6,24 +9,17 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
-/**
-后台菜单的服务层
-*/
-
 type Menu struct {
 	models.Menu
 	Url      string
 	Children []Menu
 }
 
-//type Menus struct {
-//	Menu []Menu
-//
-//}
+var ModelMenu models.Menu
 
 //组合成为厚一点菜单
 func GetMenuLists(module_id int8) (lists []map[string]interface{}, err error) {
-	var ModelMenu models.Menu
+
 	ModelMenu.Status = 1
 	ModelMenu.ModuleBelong = module_id
 	//先查找最顶级的
@@ -31,18 +27,24 @@ func GetMenuLists(module_id int8) (lists []map[string]interface{}, err error) {
 	if err != nil {
 		return lists, err
 	}
+	data := getMenuData(menus)
+	logs.Info("打印MenusData", data)
+	return data, nil
+}
+
+//无限极菜单获取子集
+func getMenuData(menus []models.Menu) []map[string]interface{} {
 	var MenusData = make([]map[string]interface{}, len(menus))
 	for key, item := range menus {
 		row := make(map[string]interface{})
-		row["id"] = item.Id
+		row["mid"] = item.Id
 		row["parent_id"] = item.ParentId
 		row["title"] = item.Name
 		row["icon"] = item.Icon
 		row["href"] = beego.URLFor(item.Controller + "." + item.Action)
-		row["spread"] = false
-		row["children"], _ = ModelMenu.QueryMenuLists(item.Id)
+		children, _ := ModelMenu.QueryMenuLists(item.Id)
+		row["children"] = getMenuData(children)
 		MenusData[key] = row
 	}
-	logs.Info("打印MenusData", MenusData)
-	return MenusData, nil
+	return MenusData
 }

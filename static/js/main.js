@@ -1,104 +1,234 @@
-//获取系统时间
-var newDate = '';
-getLangDate();
+var echarts;
 
-//值小于10时，在前面补0
-function dateFilter(date) {
-    if (date < 10) {
-        return "0" + date;
-    }
-    return date;
-}
+$(function () {
 
-function getLangDate() {
-    var dateObj = new Date(); //表示当前系统时间的Date对象
-    var year = dateObj.getFullYear(); //当前系统时间的完整年份值
-    var month = dateObj.getMonth() + 1; //当前系统时间的月份值
-    var date = dateObj.getDate(); //当前系统时间的月份中的日
-    var day = dateObj.getDay(); //当前系统时间中的星期值
-    var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-    var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
-    var hour = dateObj.getHours(); //当前系统时间的小时值
-    var minute = dateObj.getMinutes(); //当前系统时间的分钟值
-    var second = dateObj.getSeconds(); //当前系统时间的秒钟值
-    var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
-    newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
-    document.getElementById("nowTime").innerHTML = "亲爱的驊驊龔頾，" + timeValue + "好！ 欢迎使用layuiCMS 2.0模版。当前时间为： " + newDate + "　" + week;
-    setTimeout("getLangDate()", 1000);
-}
+    //config的设置是全局的
+    layui.config({
+        base: '/static/plugins/layui-extend/' //这是你存放拓展模块的根目录
+    });
 
-layui.use(['form', 'element', 'layer', 'jquery'], function () {
-    var form = layui.form,
-        layer = parent.layer === undefined ? layui.layer : top.layer,
-        element = layui.element;
-    $ = layui.jquery;
-    //上次登录时间【此处应该从接口获取，实际使用中请自行更换】
-    $(".loginTime").html(newDate.split("日")[0] + "日</br>" + newDate.split("日")[1]);
-    //icon动画
-    $(".panel a").hover(function () {
-        $(this).find(".layui-anim").addClass("layui-anim-scaleSpring");
-    }, function () {
-        $(this).find(".layui-anim").removeClass("layui-anim-scaleSpring");
-    })
-    $(".panel a").click(function () {
-        parent.addTab($(this));
-    })
-    //系统基本参数
-    if (window.sessionStorage.getItem("systemParameter")) {
-        var systemParameter = JSON.parse(window.sessionStorage.getItem("systemParameter"));
-        fillParameter(systemParameter);
-    } else {
-        $.ajax({
-            url: "/static/json/systemParameter.json",
-            type: "get",
-            dataType: "json",
-            success: function (data) {
-                fillParameter(data);
+    layui.use(['form', 'layer', 'element', 'laydate', 'table', 'echarts'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var table = layui.table;
+
+        //放到全局对象中给其他方法访问
+        window.echarts = layui.echarts;
+        //加载饼图
+        pieChartLoad();
+
+        //代办事项
+        $(".panel a").on("click", function (event) {
+            event.preventDefault();
+            var _this = $(this);
+
+            window.parent.openNewTab({
+                mid: _this.data("layid") || '',
+                title: _this.find('cite').text(),
+                icon: _this.find('.panel_icon i').data('icon'),
+                href: (_this.attr('data-url') + '?type=' + _this.find('span').attr('id'))
+            });
+        });
+
+        //快捷入口
+        $('#shortcutEntry a').on('click', function (event) {
+            event.preventDefault();
+            var _this = $(this);
+            window.parent.openNewTab({
+                mid: _this.attr("data-mid") || '',
+                title: _this.attr('title'),
+                icon: _this.data('icon'),
+                href: _this.attr('href')
+            });
+        });
+
+        var obj = {
+            type: 'get'
+            , url: "../../services/data/todoList.json"
+            , contentType: 'application/json'
+            , data: '{}'
+            , dataType: 'json'
+            , success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    $.each(data, function (index, item) {
+                        $("#" + item.name).html(item.value);
+                    });
+                } else {
+                    layer.msg('获取代办事项信息失败。');
+                    console.warn(result.msg);
+                }
             }
-        })
-    }
+            , error: function (ex) {
+                console.warn(ex.responseText);
+            }
+        };
 
-    //填充数据方法
-    function fillParameter(data) {
-        //判断字段数据是否存在
-        function nullData(data) {
-            if (data == '' || data == "undefined") {
-                return "未定义";
+
+        //jquery ajax请求
+        jqueryAjax(obj);
+
+
+        layui.laydate.render({
+            elem: '#scanDate'
+            , value: new Date(new Date().getTime())
+            , done: function () {
+                pieChartLoad();
+            }
+        });
+
+    });//layui.use的结束括号
+
+});//jquery的结束括号
+
+function echartStr(names, brower) {
+    var myChart = echarts.init(document.getElementById('main'));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '某站点用户访问来源',
+            subtext: '默认显示当前天',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "访问来源:{b}<br/>共{c}条,占比:{d}%。"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: names
+        }
+        , calculable: true
+        , series: [
+            {
+                name: '扫描批次',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: brower
+            }
+        ]
+        , toolbox: {
+            show: true,
+            feature: {
+                dataView: {readOnly: false},
+                restore: {},
+                saveAsImage: {}
+            }
+        }
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+
+    var eConsole = function (param) {
+        //var mes = '【' + param.type + '】';
+        if (typeof param.seriesIndex != 'undefined') {
+            // mes += '  seriesIndex : ' + param.seriesIndex;
+            // mes += '  dataIndex : ' + param.dataIndex;
+            if (param.type == 'click') {
+                var peiLenght = option.legend.data.length;
+                // alert(peiLenght);// 获取总共给分隔的扇形数
+                for (var i = 0; i < peiLenght; i++) {
+                    //everyClick(param, i, option.legend.data[i], data_url[i])
+                    if (param.seriesIndex == 0 && param.dataIndex == i) {
+
+                        renderTodayUserTable(option.legend.data[i]);
+
+                        return;
+                    }
+                }
             } else {
-                return data;
+                //alert("出现了未知的错误");
             }
         }
-
-        $(".version").text(nullData(data.version));      //当前版本
-        $(".author").text(nullData(data.author));        //开发作者
-        $(".homePage").text(nullData(data.homePage));    //网站首页
-        $(".server").text(nullData(data.server));        //服务器环境
-        $(".dataBase").text(nullData(data.dataBase));    //数据库版本
-        $(".maxUpload").text(nullData(data.maxUpload));    //最大上传限制
-        $(".userRights").text(nullData(data.userRights));//当前用户权限
     }
 
-    //最新文章列表
-    $.get("/static/json/newsList.json", function (data) {
-        var hotNewsHtml = '';
-        for (var i = 0; i < 5; i++) {
-            hotNewsHtml += '<tr>'
-                + '<td align="left"><a href="javascript:;"> ' + data.data[i].newsName + '</a></td>'
-                + '<td>' + data.data[i].newsTime.substring(0, 10) + '</td>'
-                + '</tr>';
+
+    myChart.on("click", eConsole);
+    myChart.on("hover", eConsole);
+
+
+};
+
+/**
+ * 渲染今日用户访问表格
+ * @param {string} chartId 点击的哪一块扇形
+ */
+function renderTodayUserTable(chartId) {
+    var obj = {
+        elem: '#scanTable'
+        , method: "get"
+        , contentType: "application/json"
+        , limit: 50
+        , limits: [10, 50, 200, 500]
+        , page: {theme: '#1E9FFF'}
+        , height: 480
+        , url: '../../services/data/todayUserTable.json'
+        , where: {
+            batchNumber: chartId
         }
-        $(".hot_news").html(hotNewsHtml);
-        $(".userAll span").text(data.length);
-    })
+        , cols: [[
+            {type: 'numbers', title: "#", minWidth: 70, width: 70}
+            , {
+                field: 'area', title: '地区', width: 170, minWidth: 170, sort: true, templet: function (data) {
+                    return '<a style="color:blue" href="https://www.baidu.com/s?ie=UTF-8&wd=' + encodeURI(data.area) + '" title="地区" target="_blank">' + data.area + '</a>';
+                }
+            }
+            , {
+                title: '访问来源', minWidth: 220, sort: true, templet: function (d) {
+                    return chartId;
+                }
+            }
+        ]]
+        , done: function (res, curr, count) {
+        }
+    };
 
-    //用户数量
-    $.get("/static/json/userList.json", function (data) {
-        $(".userAll span").text(data.count);
-    })
+    layuiTable(layui.table, obj);
+}
 
-    //外部图标
-    $.get(iconUrl, function (data) {
-        $(".outIcons span").text(data.split(".icon-").length - 1);
-    })
+//饼图数据加载
+function pieChartLoad() {
 
-})
+    var todayDate = (($("#scanDate").val()) || (formatDate(new Date().getTime())));
+
+    $("#scanDate").val(todayDate);
+
+
+    var obj = {
+        type: 'get'
+        , url: "../../services/data/todayQuery.json?date=" + todayDate
+        , contentType: 'application/json'
+        , data: '{}'
+        , dataType: 'json'
+        , success: function (result) {
+            if (result.code == 200) {
+                var data = result.data;
+                var names = [];
+                $.each(data, function (index, item) {
+                    names.push(item.name);
+                });
+                echartStr(names, data);
+            } else {
+                layer.msg('获取扫描批次信息失败。');
+                echartStr([], []);
+                console.warn(result.msg);
+            }
+        },
+        complete: function (XMLHttpRequest, textStatus) {
+
+        }
+        , error: function (ex) {
+            echartStr([], []);
+            console.warn(ex.responseText);
+        }
+    };
+
+    //jquery ajax请求
+    jqueryAjax(obj);
+
+}
