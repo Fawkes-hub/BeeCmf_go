@@ -4,12 +4,14 @@ type IndexController struct {
 	AppBaseController
 }
 
-// @router / [get]
 func (c *IndexController) Index() {
-	c.TplName = "app/index.html"
+	c.TplName = "index.html"
 }
 
-// @router /main [get]
+func (c *IndexController) Layout() {
+	c.TplName = "app/layout.html"
+}
+
 func (c *IndexController) Main() {
 	c.Ctx.WriteString("这是访问的主要内容")
 }

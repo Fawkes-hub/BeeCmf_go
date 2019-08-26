@@ -7,6 +7,8 @@ import "github.com/astaxie/beego"
 func InitConfig() {
 	LoadConfig("data/conf/conf.conf")
 	LoadConfig("data/conf/database.conf")
+	beego.BConfig.WebConfig.TemplateLeft = "<<<"
+	beego.BConfig.WebConfig.TemplateRight = ">>>"
 }
 
 func LoadConfig(path string) {

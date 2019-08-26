@@ -1,6 +1,7 @@
 package AppController
 
 import (
+	"github.com/BeeCmf/cmf/common"
 	"github.com/BeeCmf/models"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
@@ -46,12 +47,17 @@ func (c *LoginController) Login() {
 			logs.Info("错误信息：", err.Error())
 			c.Abort500(err.Error(), "")
 		} else {
+			user.Pwd = ""
 			//验证成功 进行session的记录
 			c.SetSession(SESSION_USER_KEY, user)
-			c.Abort200("", "登录成功", "/")
+			var userInfo = make(map[string]interface{})
+			userInfo["token"] = common.SycMd5(user.Login + user.Pwd)
+			userInfo["user"] = user
+			logs.Info("是否进入了登录成功地址")
+			c.Abort200(userInfo, "登录成功", "/")
 		}
 	} else {
-		c.Display()
+		c.Display("user/login")
 	}
 }
 

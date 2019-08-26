@@ -15,15 +15,21 @@ type AppBaseController struct {
 
 //控制器的所有基类 预处理
 func (base *AppBaseController) NextPreparer() {
-	logs.Info("看一下是否有进11111111入")
 	////检测当前用户有已经登录
-	isLogin, _ := base._checkLogin()
+	isLogin, user := base._checkLogin()
+	logs.Info("是否登录状态", isLogin)
 	if isLogin == false {
 		controller, _ := base.GetControllerAndAction()
 		if controller != "LoginController" {
-			//base.Redirect("/login", 302)
+			//base.Ctx.Redirect(401,base.URLFor("LoginController.Login"))
+			//base.Abort402()
+			base.Data["isLogin"] = false
 		}
+	} else {
+		base.Data["isLogin"] = true
 	}
+
+	base.Data["user"] = user
 }
 
 //检测当前用户是否登录

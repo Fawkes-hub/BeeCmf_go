@@ -1,9 +1,9 @@
 package common
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 //控制器的后台基础
@@ -90,9 +90,28 @@ func (c *BaseController) Abort200(data interface{}, msg string, url string) {
 	if c.IsAjax() {
 		c.ServeJSON()
 	} else {
-		c.Data["Content"] = msg
+		c.Data["Content"] = mystruct.Msg
 		c.Abort("200")
-		c.Redirect(url, 200)
+		c.Redirect(mystruct.Url, mystruct.Code)
+	}
+	c.StopRun()
+	return
+}
+
+//登录超时的判断
+func (c *BaseController) Abort402() {
+	mystruct := &ResultJson{
+		Code: 402,
+		Data: "",
+		Url:  "/login",
+		Msg:  "登录超时",
+	}
+	c.Data["json"] = &mystruct
+	if c.IsAjax() {
+		c.ServeJSON()
+	} else {
+		c.Data["Content"] = mystruct.Msg
+		c.Redirect(mystruct.Url, mystruct.Code)
 	}
 	c.StopRun()
 	return
@@ -107,13 +126,6 @@ func (c *BaseController) Display(tpl ...string) {
 	} else {
 		tplname = c.controllerName + "/" + c.actionName + ".html"
 	}
-	cont, act := c.GetControllerAndAction()
-	logs.Info("传入的地址数据：", len(tpl))
-	logs.Info("传入的地址数据：", tpl)
-	logs.Info("当前请求的控制器112：", cont, act)
-	logs.Info("当前请求的控制器：", c.controllerName+c.actionName)
-	logs.Info("当前查看的文件路径地址：", tplname)
-	//c.Layout = "public/layout.html"
 	c.TplName = "app/" + tplname
 }
 
@@ -125,4 +137,11 @@ func (c *BaseController) IsPost() bool {
 // 是否GET访问提交
 func (c *BaseController) IsGet() bool {
 	return c.Ctx.Request.Method == "GET"
+}
+
+// 是否是获取html界面界面
+func (c *BaseController) IsHtml() bool {
+	header := c.Ctx.Request.Header
+	return c.Ctx.Request.Method == "GET" &&
+		(strings.Index(header.Get("Accept"), "text/html") != -1)
 }

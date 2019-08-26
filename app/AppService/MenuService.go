@@ -6,7 +6,6 @@ package AppService
 import (
 	"github.com/BeeCmf/models"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 )
 
 type Menu struct {
@@ -19,7 +18,6 @@ var ModelMenu models.Menu
 
 //组合成为厚一点菜单
 func GetMenuLists(module_id int8) (lists []map[string]interface{}, err error) {
-
 	ModelMenu.Status = 1
 	ModelMenu.ModuleBelong = module_id
 	//先查找最顶级的
@@ -28,7 +26,6 @@ func GetMenuLists(module_id int8) (lists []map[string]interface{}, err error) {
 		return lists, err
 	}
 	data := getMenuData(menus)
-	logs.Info("打印MenusData", data)
 	return data, nil
 }
 
@@ -43,7 +40,7 @@ func getMenuData(menus []models.Menu) []map[string]interface{} {
 		row["icon"] = item.Icon
 		row["href"] = beego.URLFor(item.Controller + "." + item.Action)
 		children, _ := ModelMenu.QueryMenuLists(item.Id)
-		row["children"] = getMenuData(children)
+		row["childs"] = getMenuData(children)
 		MenusData[key] = row
 	}
 	return MenusData
