@@ -2,6 +2,7 @@ package AppController
 
 import (
 	"github.com/BeeCmf/app/AppService"
+	"github.com/astaxie/beego/logs"
 )
 
 type MenuController struct {
@@ -19,5 +20,14 @@ func (c *MenuController) Index() {
 		}
 		c.Abort200(lists, "", "")
 	}
+}
 
+//菜单的添加
+func (c *MenuController) Add() {
+	logs.Info("是否请求到添加了")
+	if c.IsHtml() {
+		c.Display()
+	} else {
+
+	}
 }

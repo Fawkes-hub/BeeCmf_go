@@ -28,7 +28,6 @@ func (base *AppBaseController) NextPreparer() {
 	} else {
 		base.Data["isLogin"] = true
 	}
-
 	base.Data["user"] = user
 }
 
