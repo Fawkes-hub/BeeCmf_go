@@ -99,7 +99,9 @@ layui.define(function (exports) {
             echarts: 'lay/extends/echarts',
             echartsTheme: 'lay/extends/echartsTheme',
             //复制内容到剪贴板
-            clipboard: 'lay/extends/clipboard'
+            clipboard: 'lay/extends/clipboard',
+            //树形菜单的功能
+            treeGrid: 'lay/extends/treeGrid'
         }
     })
 })

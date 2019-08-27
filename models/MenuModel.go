@@ -6,6 +6,8 @@ package models
 
 import (
 	"strings"
+
+	"github.com/astaxie/beego/logs"
 )
 
 type Menu struct {
@@ -45,4 +47,10 @@ func (m *Menu) QueryMenuLists(parent_id int, field ...interface{}) (menu []Menu,
 //进行添加
 func (m *Menu) AddMenuData() (err error) {
 	return Db.Model(Menu{}).Create(&m).Error
+}
+
+//获取所有的菜单
+func (m *Menu) AllMenu() (menu []Menu, err error) {
+	logs.Info("查询条件", m)
+	return menu, Db.Model(Menu{}).Where(&m).Order("list_order asc").Find(&menu).Error
 }

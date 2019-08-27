@@ -16,7 +16,7 @@ func (c *MenuController) Index() {
 	if c.IsHtml() {
 		c.Display()
 	} else {
-		lists, err := AppService.GetMenuLists(1)
+		lists, err := AppService.GetMenuLists(1, "")
 		if err != nil {
 			c.Abort500(err.Error(), "/")
 		}
@@ -26,8 +26,9 @@ func (c *MenuController) Index() {
 
 //菜单的添加
 func (c *MenuController) Add() {
-	logs.Info("是否请求到添加了")
 	if c.IsHtml() {
+		parent_id, _ := c.GetInt64("parent_id", 0)
+		logs.Info("添加的父级id", parent_id)
 		c.Display()
 	} else {
 		var err error
@@ -48,5 +49,19 @@ func (c *MenuController) Add() {
 			c.Abort500(err.Error(), "")
 		}
 		c.Abort200("", "添加成功", c.URLFor("MenuController.Index"))
+	}
+}
+
+//列表查看
+func (c *MenuController) Lists() {
+	if c.IsHtml() {
+		c.Display("menu/index")
+	} else {
+		lists, err := AppService.GetMenuLists(1, "All")
+		if err != nil {
+			c.Abort500(err.Error(), "/")
+		}
+		c.Data["json"] = lists
+		c.Abort200(lists, "", "")
 	}
 }

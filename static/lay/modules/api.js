@@ -7,6 +7,7 @@ layui.define([], function (exports) {
         addMenu: "menu/add",
         editMenu: "menu/edit",
         delMenu: "menu/del",
+        listsMenu: "menu/lists",
 
         getGoods: 'json/goods.js',
     });
