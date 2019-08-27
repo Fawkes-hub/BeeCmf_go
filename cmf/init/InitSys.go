@@ -1,9 +1,10 @@
 package init
 
 import (
+	"strings"
+
 	"github.com/BeeCmf/cmf/common"
 	"github.com/astaxie/beego"
-	"strings"
 )
 
 func init() {
@@ -12,7 +13,7 @@ func init() {
 	initSession()
 	initError()
 	InitDatabase()
-
+	InitValidate()
 }
 
 func initTemplate() {

@@ -1114,7 +1114,14 @@ textarea::-webkit-input-placeholder {
     border-color: #eee;
 }
 
-.layui-input:focus,
+/*.layui-input:focus,*/
+/*.layui-form-select:focus,*/
+/*.layui-textarea:focus {*/
+/*    border-color: #94b2fa !important;*/
+/*    box-shadow: 0 0 0 3px rgba(90, 139, 255, 0.2);*/
+/*}*/
+.layui-form-danger + .layui-form-select .layui-input,
+.layui-form-danger:focus,
 .layui-textarea:focus {
     border-color: #94b2fa !important;
     box-shadow: 0 0 0 3px rgba(90, 139, 255, 0.2);

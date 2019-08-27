@@ -166,9 +166,23 @@ layui
                     layui.dropdown.render({
                         elem: '.nepadmin-tabs-down',
                         click: function (name) {
-                            name == 'all' ? tab.delAll() : tab.delOther()
+                            switch (name) {
+                                case "all":
+                                    tab.delAll();
+                                    break;
+                                case "other":
+                                    tab.delOther();
+                                    break;
+                                case "refresh":
+                                    tab.refresh();
+                                    break
+                            }
                         },
                         options: [
+                            {
+                                name: 'refresh',
+                                title: '刷新当前页面'
+                            },
                             {
                                 name: 'other',
                                 title: '关闭其他选项卡'
@@ -179,7 +193,6 @@ layui
                             }
                         ]
                     })
-
                     $(document).on('click', btnCls, function (e) {
                         var url = $(this).attr('lay-url')
                         if ($(e.target).hasClass('nepadmin-tabs-close')) {
@@ -332,7 +345,6 @@ layui
                                 '</div></div>'
                             )
                             var params = self.fillHtml(fileurl, htmlElem, 'prepend')
-                            console.log(params, "11111111")
                             route.title = params.title
                             tab.data.push(route)
                             layui.admin.render(tab.tabMenuTplId)
@@ -404,7 +416,6 @@ layui
             self.fillHtml = function (url, htmlElem, modeName) {
                 var fluid = htmlElem.find('.layui-fluid[lay-title]')
                 var title = ''
-                console.log(fluid, "2222222")
                 if (fluid.length > 0) {
                     title = fluid.attr('lay-title')
                     self.setTitle(title)
@@ -419,7 +430,6 @@ layui
                 }
                 //重新对面包屑进行渲染
                 layui.element.render('breadcrumb', 'nepadmin-breadcrumb')
-                console.log({title: title, url: url, htmlElem: htmlElem}, "33333333333333")
                 return {title: title, url: url, htmlElem: htmlElem}
             }
             //解析普通文件
@@ -457,7 +467,6 @@ layui
             }
             self.log = function (msg, type) {
                 if (conf.debug === false) return
-                console.log(type)
                 if (type == undefined) type = 'error'
                 console.error(msg)
             }

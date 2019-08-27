@@ -5,6 +5,7 @@ package AppService
 
 import (
 	"github.com/BeeCmf/models"
+	//_ "github.com/BeeCmf/models"
 	"github.com/astaxie/beego"
 )
 
@@ -44,4 +45,10 @@ func getMenuData(menus []models.Menu) []map[string]interface{} {
 		MenusData[key] = row
 	}
 	return MenusData
+}
+
+//添加数据
+func AddMenu(menu *models.Menu) (err error) {
+	ModelMenu = *menu
+	return ModelMenu.AddMenuData()
 }

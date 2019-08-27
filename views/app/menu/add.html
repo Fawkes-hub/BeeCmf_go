@@ -1,103 +1,128 @@
 <div class="layui-fluid" lay-title="表单组合">
     <div class="layui-card">
         <div class="layui-card-body" style="padding: 15px;">
-            <form class="layui-form" action="" lay-filter="form-group">
+            <form class="layui-form" action="" method="post" lay-filter="form-group">
                 <div class="layui-form-item">
                     <label class="layui-form-label">上级菜单栏</label>
                     <div class="layui-input-block">
-                        <select name="parent_id" lay-filter="parent_id">
-                            <option value=""></option>
-                            <option value="0">作为一级菜单</option>
-                        </select>
+                        <label>
+                            <select name="parent_id" lay-verify="required">
+                                <option value=""></option>
+                                <option value="0">作为一级菜单</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">菜单名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" placeholder="请输入菜单名称" autocomplete="off"
-                               class="layui-input">
+                        <label>
+                            <input type="text" name="name" lay-verify="required" placeholder="请输入菜单名称"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">控制器</label>
                     <div class="layui-input-block">
-                        <input type="text" name="controller" lay-verify="required" placeholder="请输入控制器名"
-                               autocomplete="off"
-                               class="layui-input">
+                        <label>
+                            <input type="text" name="controller" lay-verify="required" placeholder="请输入控制器名"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">方法</label>
                     <div class="layui-input-block">
-                        <input type="text" name="action" lay-verify="required" placeholder="请输入方法名" autocomplete="off"
-                               class="layui-input">
+                        <label>
+                            <input type="text" name="action" lay-verify="required" placeholder="请输入方法名"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">参数</label>
                     <div class="layui-input-block">
-                        <input type="text" name="param" lay-verify="" placeholder="请输入参数" autocomplete="off"
-                               class="layui-input">
+                        <label>
+                            <input type="text" name="param" placeholder="请输入参数" autocomplete="off"
+                                   class="layui-input">
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
-                        <input type="text" name="icon" lay-verify="" placeholder="请输入" autocomplete="off"
-                               class="layui-input">
+                        <label>
+                            <input type="text" name="icon" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </label>
+                        <div class="layui-inline">
+                            <div class="layui-form-mid layui-word-aux"><a href="/icon/index">选择</a>请选择图标</div>
+                        </div>
                     </div>
-                    <div class="layui-inline">
-                        <div class="layui-form-mid layui-word-aux"><a href="/icon/index">选择</a>请选择图标</div>
-                    </div>
+
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
-                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <label>
+                            <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </label>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">开启状态</label>
                     <div class="layui-input-block">
-                        <select name="status" lay-filter="aihao">
-                            <option value="1" selected="">在左侧菜单展示</option>
-                            <option value="0">在左侧菜单隐藏</option>
-                        </select>
+                        <label>
+                            <select name="status">
+                                <option value="1" selected="">在左侧菜单展示</option>
+                                <option value="0">在左侧菜单隐藏</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型</label>
                     <div class="layui-input-block">
-                        <select name="type" lay-filter="aihao">
-                            <option value="1" selected="">在左侧菜单展示</option>
-                            <option value="0">在左侧菜单隐藏</option>
-                        </select>
+                        <label>
+                            <select name="type">
+                                <option value="1" selected="">有界面可访问菜单</option>
+                                <option value="0">无界面可访问菜单</option>
+                                <option value="0">只作为菜单</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">单行选择框</label>
+                    <label class="layui-form-label">菜单所属模块</label>
                     <div class="layui-input-block">
-                        <select name="interest" lay-filter="aihao">
-                            <option value=""></option>
-                            <option value="0">写作</option>
-                            <option value="1" selected="">阅读</option>
-                            <option value="2">游戏</option>
-                            <option value="3">音乐</option>
-                            <option value="4">旅行</option>
-                        </select>
+                        <label>
+                            <select name="module_belong">
+                                <option value="0" selected>默认</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
-
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">普通文本域</label>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
-                        <textarea name="text" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <label>
+                            <input type="text" name="list_order" placeholder="请输入排序" autocomplete="off"
+                                   class="layui-input" value="1000">
+                        </label>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="form-group-submit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" lay-filter="form-group-submit">
+                            <i style="display: none"
+                               class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop"></i>
+                            立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -107,7 +132,48 @@
 </div>
 
 <script>
-    layui.use(['admin', 'form', 'laydate'], function () {
+    layui.use(['admin', 'form'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , layer = layui.layer
+            , form = layui.form;
+        form.render(null, 'form-group');
+        var loading = $(this).find('.layui-icon');
+        if (loading.is(":visible")) return;
+        loading.show();
+        form.on('submit(form-group-submit)', function (data) {
+            console.log(data.field)
+            //想后台发送请求进行登录操作
+            admin.post({
+                api: 'addMenu',
+                type: "post",
+                data: data.field,
+                success: function (res) {
+                    layer.msg(res.msg, {
+                        icon: 1,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        admin.navigate(res.url);
+                    });
+                },
+                error: function (res) {
+                    layer.msg(res.msg, {
+                        icon: 2,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        loading.hide();
+                    });
+
+                },
+                complete: function () {
+                    //loading.hide();
+                }
+            });
+            return false;
+        });
+    });
+    /*layui.use(['admin', 'form', 'laydate'], function () {
         var $ = layui.$
             , admin = layui.admin
             , element = layui.element
@@ -121,7 +187,7 @@
             elem: '#form-group-date'
         });
 
-        /* 自定义验证规则 */
+        /!* 自定义验证规则 *!/
         form.verify({
             title: function (value) {
                 if (value.length < 5) {
@@ -134,7 +200,7 @@
             }
         });
 
-        /* 监听指定开关 */
+        /!* 监听指定开关 *!/
         form.on('switch(form-group-switch)', function (data) {
             layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
                 offset: '6px'
@@ -142,12 +208,12 @@
             layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
         });
 
-        /* 监听提交 */
+        /!* 监听提交 *!/
         form.on('submit(form-group-submit)', function (data) {
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             })
             return false;
         });
-    });
+    });*/
 </script>
