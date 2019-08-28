@@ -23,5 +23,6 @@ func init() {
 
 	beego.AutoRouter(&AppController.MenuController{})
 	beego.AutoRouter(&AppController.IndexController{})
+	beego.AutoRouter(&AppController.SysController{})
 
 }

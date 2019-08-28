@@ -133,6 +133,8 @@
 
     function edit(obj) {
         console.log(obj, "edit")
+        //页面跳转到添加页面
+        admin.navigate("/menu/add?id=" + obj.data.mid);
     }
 
     function openorclose() {

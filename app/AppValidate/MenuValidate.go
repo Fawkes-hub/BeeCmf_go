@@ -32,11 +32,15 @@ func (a *MenuValidate) ValidMenu() (err error) {
 	}
 	//检测当前文章名称是否存在
 	var menu models.Menu
+	logs.Info("传入的id", a)
 	menu.Controller = a.Controller
 	menu.Action = a.Action
 	menu.Param = a.Param
-	menus, err := menu.QueryMenuLists(a.ParentId)
-	if len(menus) > 0 {
+	menu.ParentId = a.ParentId
+	menus, err := menu.OneMenu()
+	logs.Info("查询到的信息", menus)
+	logs.Info("为空的信息", models.Menu{})
+	if !reflect.DeepEqual(menus, models.Menu{}) {
 		return errors.New("当前控制器与方法在存在，请重新填写")
 	}
 	return nil

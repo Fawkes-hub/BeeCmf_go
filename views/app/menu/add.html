@@ -21,7 +21,7 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="name" lay-verify="required" placeholder="请输入菜单名称"
-                                   autocomplete="off"
+                                   autocomplete="off" value="[^ .data.Name ^]"
                                    class="layui-input">
                         </label>
                     </div>
@@ -31,7 +31,7 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="controller" lay-verify="required" placeholder="请输入控制器名"
-                                   autocomplete="off"
+                                   autocomplete="off" value="[^ .data.Controller ^]"
                                    class="layui-input">
                         </label>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="action" lay-verify="required" placeholder="请输入方法名"
-                                   autocomplete="off"
+                                   autocomplete="off" value="[^ .data.Action ^]"
                                    class="layui-input">
                         </label>
                     </div>
@@ -50,7 +50,8 @@
                     <label class="layui-form-label">参数</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="param" placeholder="请输入参数" autocomplete="off"
+                            <input type="text" name="param" placeholder="请输入参数"
+                                   autocomplete="off" value="[^ .data.Param ^]"
                                    class="layui-input">
                         </label>
                     </div>
@@ -59,11 +60,16 @@
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="icon" placeholder="请输入" autocomplete="off"
+                            <input type="text" name="icon" placeholder="请输入"
+                                   autocomplete="off" value="[^ .data.Icon ^]"
                                    class="layui-input">
                         </label>
                         <div class="layui-inline">
-                            <div class="layui-form-mid layui-word-aux"><a href="/icon/index">选择</a>请选择图标</div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-popup="/sys/icon">选择
+                                </button>
+                                请选择图标
+                            </div>
                         </div>
                     </div>
 
@@ -72,7 +78,8 @@
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
                         <label>
-                            <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            <textarea name="remark" placeholder="请输入内容"
+                                      class="layui-textarea">[^ .data.Remark ^]</textarea>
                         </label>
                     </div>
                 </div>
@@ -82,8 +89,15 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="status">
-                                <option value="1" selected="">在左侧菜单展示</option>
+                                [^ if eq .data.Status 0 ^]
+                                <option value="1">在左侧菜单展示</option>
+                                <option value="0" selected>在左侧菜单隐藏</option>
+                                [^ else ^]
+                                <option value="1" selected>在左侧菜单展示</option>
                                 <option value="0">在左侧菜单隐藏</option>
+                                [^ end ^]
+
+
                             </select>
                         </label>
                     </div>
@@ -93,9 +107,25 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="type">
-                                <option value="1" selected="">有界面可访问菜单</option>
-                                <option value="0">无界面可访问菜单</option>
-                                <option value="0">只作为菜单</option>
+
+                                <option value="1"
+                                        [^ if eq .data.Type 1 ^]
+                                        selected
+                                        [^ end ^]
+                                >有界面可访问菜单
+                                </option>
+                                <option value="0"
+                                        [^ if eq .data.Type 2 ^]
+                                        selected
+                                        [^ end ^]
+                                >无界面可访问菜单
+                                </option>
+                                <option value="0"
+                                        [^ if eq .data.Type 0 ^]
+                                        selected
+                                        [^ end ^]
+                                >只作为菜单
+                                </option>
                             </select>
                         </label>
                     </div>
@@ -105,7 +135,12 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="module_belong">
-                                <option value="1" selected>默认</option>
+                                <option value="1"
+                                        [^ if eq .data.ModuleBelong 1 ^]
+                                        selected
+                                        [^ end ^]
+                                >默认
+                                </option>
                             </select>
                         </label>
                     </div>
@@ -115,7 +150,12 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="list_order" placeholder="请输入排序" autocomplete="off"
-                                   class="layui-input" value="10000">
+                                   class="layui-input"
+                                   [^ if eq .data.ListOrder 0 ^]
+                                   value="10000"
+                                   [^ else ^]
+                                   value="[^ .data.ListOrder ^]"
+                                   [^ end ^]>
                         </label>
                     </div>
                 </div>

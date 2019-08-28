@@ -1,7 +1,7 @@
 package AppController
 
 import (
-	"github.com/astaxie/beego/logs"
+	"database/sql"
 	"strconv"
 
 	"github.com/BeeCmf/app/AppService"
@@ -28,19 +28,38 @@ func (c *MenuController) Index() {
 
 //菜单的添加
 func (c *MenuController) Add() {
+	var (
+		maps  models.Menu
+		data  models.Menu
+		maps2 models.Menu
+		err   error
+		null  sql.NullInt64
+	)
 	if c.IsHtml() {
+		id, _ := c.GetInt("id", 0)
 		parent_id, _ := c.GetInt("parent_id", 0)
 		c.Data["option"] = ""
 		if parent_id != 0 {
 			//查找名称
-			var maps models.Menu
 			maps.Id = parent_id
 			data, _ := AppService.GetMenuByMap(&maps)
-			c.Data["option"] = "<option value='" + strconv.FormatInt(int64(parent_id), 10) + "' selected>" + data.(models.Menu).Name + "</option>"
+			c.Data["option"] = "<option value='" + strconv.FormatInt(int64(parent_id), 10) + "' selected>" + data.Name + "</option>"
+		} else if id != 0 {
+			//查找名称
+			maps.Id = id
+			data, _ = AppService.GetMenuByMap(&maps)
+			c.Data["option"] = ""
+			if data.ParentId != null { //找到父级信息
+				parent_id = int(data.ParentId.Int64)
+				//查找名称
+				maps2.Id = parent_id
+				data, _ := AppService.GetMenuByMap(&maps2)
+				c.Data["option"] = "<option value='" + strconv.FormatInt(int64(parent_id), 10) + "' selected>" + data.Name + "</option>"
+			}
 		}
+		c.Data["data"] = data
 		c.Display()
 	} else {
-		var err error
 		params := models.Menu{}
 		if err := c.ParseForm(&params); err != nil {
 			c.Abort500("传入参数错误："+err.Error(), "")
@@ -53,6 +72,7 @@ func (c *MenuController) Add() {
 			c.Abort500(err.Error(), "")
 		}
 		//数据的添加
+		params.ParentId = params.ParentId
 		err = AppService.AddMenu(&params)
 		if err != nil {
 			c.Abort500(err.Error(), "")
@@ -79,18 +99,18 @@ func (c *MenuController) Lists() {
 func (c *MenuController) Del() {
 	//删除父级 所有子级全部删除
 	id, _ := c.GetInt("id", 0)
-	logs.Info("请求删除的id", id)
-	if id != 0 {
-		//查找名称
-		var maps models.Menu
-		maps.Id = id
-		data, _ := AppService.GetMenuByMap(&maps)
-		if data.(models.Menu).Id == 0 {
-			c.Abort500("数据不存在，请刷新后操作", "")
-		}
-		if err := AppService.DelMenuByMap(&maps); err != nil {
-			c.Abort500("数据不存在，请刷新后操作："+err.Error(), "")
-		}
-		c.Abort200("", "删除成功", "")
+	if id == 0 {
+		c.Abort500("数据不存在", "")
 	}
+	//查找名称
+	var maps models.Menu
+	maps.Id = id
+	data, _ := AppService.GetMenuByMap(&maps)
+	if data.Id == 0 {
+		c.Abort500("数据不存在，请刷新后操作", "")
+	}
+	if err := AppService.DelMenuByMap(&maps); err != nil {
+		c.Abort500("数据不存在，请刷新后操作："+err.Error(), "")
+	}
+	c.Abort200("", "删除成功", "")
 }

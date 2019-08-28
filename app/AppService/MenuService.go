@@ -70,7 +70,7 @@ func AddMenu(menu *models.Menu) (err error) {
 }
 
 //根据结构体条件查询数据
-func GetMenuByMap(menu *models.Menu) (data interface{}, err error) {
+func GetMenuByMap(menu *models.Menu) (data models.Menu, err error) {
 	ModelMenuOne = *menu
 	data, err = ModelMenuOne.OneMenu()
 	return
