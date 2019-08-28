@@ -15,19 +15,23 @@ type Menu struct {
 	Children []Menu
 }
 
-var ModelMenu models.Menu
+var (
+	ModelMenuLists models.Menu
+	ModelMenuAdd   models.Menu
+	ModelMenuOne   models.Menu
+)
 
 //组合成为厚一点菜单
 func GetMenuLists(module_id int8, data_type string) (lists []map[string]interface{}, err error) {
-	ModelMenu.ModuleBelong = module_id
+	ModelMenuLists.ModuleBelong = module_id
 	var menus []models.Menu
 	if data_type == "All" {
-		ModelMenu.Status = 0 //结构体查询0的时候 查询条件会失效  如果需要查询专门的0必须是否条件查询
-		menus, err = ModelMenu.AllMenu()
+		ModelMenuLists.Status = 0 //结构体查询0的时候 查询条件会失效  如果需要查询专门的0必须是否条件查询
+		menus, err = ModelMenuLists.AllMenu()
 	} else {
 		//先查找最顶级的
-		ModelMenu.Status = 1
-		menus, err = ModelMenu.QueryMenuLists(0)
+		ModelMenuLists.Status = 1
+		menus, err = ModelMenuLists.QueryMenuLists(0)
 		if err != nil {
 			return lists, err
 		}
@@ -50,7 +54,7 @@ func getMenuData(menus []models.Menu, data_type string) []map[string]interface{}
 		row["status"] = item.Status
 		row["list_order"] = item.ListOrder
 		if data_type != "All" {
-			children, _ := ModelMenu.QueryMenuLists(item.Id)
+			children, _ := ModelMenuLists.QueryMenuLists(item.Id)
 			row["childs"] = getMenuData(children, data_type)
 		}
 		MenusData[key] = row
@@ -60,6 +64,12 @@ func getMenuData(menus []models.Menu, data_type string) []map[string]interface{}
 
 //添加数据
 func AddMenu(menu *models.Menu) (err error) {
-	ModelMenu = *menu
-	return ModelMenu.AddMenuData()
+	ModelMenuAdd = *menu
+	return ModelMenuAdd.AddMenuData()
+}
+
+func GetMenuByMap(menu *models.Menu) (data interface{}, err error) {
+	ModelMenuOne = *menu
+	data, err = ModelMenuOne.OneMenu()
+	return
 }

@@ -1,10 +1,11 @@
 package AppController
 
 import (
+	"strconv"
+
 	"github.com/BeeCmf/app/AppService"
 	"github.com/BeeCmf/app/AppValidate"
 	"github.com/BeeCmf/models"
-	"github.com/astaxie/beego/logs"
 )
 
 type MenuController struct {
@@ -27,8 +28,15 @@ func (c *MenuController) Index() {
 //菜单的添加
 func (c *MenuController) Add() {
 	if c.IsHtml() {
-		parent_id, _ := c.GetInt64("parent_id", 0)
-		logs.Info("添加的父级id", parent_id)
+		parent_id, _ := c.GetInt("parent_id", 0)
+		c.Data["option"] = ""
+		if parent_id != 0 {
+			//查找名称
+			var maps models.Menu
+			maps.Id = parent_id
+			data, _ := AppService.GetMenuByMap(&maps)
+			c.Data["option"] = "<option value='" + strconv.FormatInt(int64(parent_id), 10) + "' selected>" + data.(models.Menu).Name + "</option>"
+		}
 		c.Display()
 	} else {
 		var err error
@@ -48,7 +56,7 @@ func (c *MenuController) Add() {
 		if err != nil {
 			c.Abort500(err.Error(), "")
 		}
-		c.Abort200("", "添加成功", c.URLFor("MenuController.Index"))
+		c.Abort200("", "添加成功", c.URLFor("MenuController.Lists"))
 	}
 }
 

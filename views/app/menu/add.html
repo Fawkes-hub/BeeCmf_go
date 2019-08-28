@@ -7,8 +7,11 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="parent_id" lay-verify="required">
-                                <option value=""></option>
-                                <option value="0">作为一级菜单</option>
+                                [^if .option|len ^]
+                                [^ .option|str2html ^]
+                                [^else^]
+                                <option value="0" selected>作为一级菜单</option>
+                                [^end^]
                             </select>
                         </label>
                     </div>
@@ -102,7 +105,7 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="module_belong">
-                                <option value="0" selected>默认</option>
+                                <option value="1" selected>默认</option>
                             </select>
                         </label>
                     </div>
@@ -112,7 +115,7 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="list_order" placeholder="请输入排序" autocomplete="off"
-                                   class="layui-input" value="1000">
+                                   class="layui-input" value="10000">
                         </label>
                     </div>
                 </div>
@@ -139,6 +142,7 @@
             , layer = layui.layer
             , form = layui.form;
         form.render(null, 'form-group');
+        var layUrl = $(this)[0].view.containerBody.find(".nepadmin-tabs-item").attr("lay-url")
         var loading = $(this).find('.layui-icon');
         if (loading.is(":visible")) return;
         loading.show();
@@ -154,7 +158,7 @@
                         icon: 1,
                         time: 800 //2秒关闭（如果不配置，默认是3秒）
                     }, function () {
-                        admin.navigate(res.url);
+                        admin.submitToJump(layUrl, res.url)
                     });
                 },
                 error: function (res) {
@@ -173,47 +177,4 @@
             return false;
         });
     });
-    /*layui.use(['admin', 'form', 'laydate'], function () {
-        var $ = layui.$
-            , admin = layui.admin
-            , element = layui.element
-            , layer = layui.layer
-            , laydate = layui.laydate
-            , form = layui.form;
-
-        form.render(null, 'form-group');
-
-        laydate.render({
-            elem: '#form-group-date'
-        });
-
-        /!* 自定义验证规则 *!/
-        form.verify({
-            title: function (value) {
-                if (value.length < 5) {
-                    return '标题至少得5个字符啊';
-                }
-            }
-            , pass: [/(.+){6,12}$/, '密码必须6到12位']
-            , content: function (value) {
-                layedit.sync(editIndex);
-            }
-        });
-
-        /!* 监听指定开关 *!/
-        form.on('switch(form-group-switch)', function (data) {
-            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
-                offset: '6px'
-            });
-            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-        });
-
-        /!* 监听提交 *!/
-        form.on('submit(form-group-submit)', function (data) {
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            })
-            return false;
-        });
-    });*/
 </script>

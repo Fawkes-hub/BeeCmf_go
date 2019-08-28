@@ -24,6 +24,8 @@
         treeGrid = layui.treeGrid;//很重要
         layer = layui.layer;
         admin = layui.admin;
+        //刷新当前页
+        layui.view.tab.refresh()
         ptable = treeGrid.render({
             id: tableId
             , elem: '#' + tableId
@@ -106,10 +108,6 @@
         }
         //页面跳转到添加页面
         admin.navigate("/menu/add?parent_id=" + obj.data.mid);
-        // admin.get({
-        //     url:"/menu/add",
-        //     data: {parent_id:obj.data.mid,},
-        // })
     }
 
     function edit(obj) {

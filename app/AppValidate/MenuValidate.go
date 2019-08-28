@@ -35,7 +35,7 @@ func (a *MenuValidate) ValidMenu() (err error) {
 	menu.Controller = a.Controller
 	menu.Action = a.Action
 	menu.Param = a.Param
-	menus, err := menu.QueryMenuLists(menu.ParentId)
+	menus, err := menu.QueryMenuLists(a.ParentId)
 	if len(menus) > 0 {
 		return errors.New("当前控制器与方法在存在，请重新填写")
 	}

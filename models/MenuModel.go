@@ -54,3 +54,9 @@ func (m *Menu) AllMenu() (menu []Menu, err error) {
 	logs.Info("查询条件", m)
 	return menu, Db.Model(Menu{}).Where(&m).Order("list_order asc").Find(&menu).Error
 }
+
+//获取所有的菜单
+func (m *Menu) OneMenu() (menu Menu, err error) {
+	logs.Info("查询条件", m)
+	return menu, Db.Model(Menu{}).Where(&m).First(&menu).Error
+}

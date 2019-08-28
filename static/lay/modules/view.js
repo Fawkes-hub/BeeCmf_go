@@ -40,7 +40,6 @@ layui
                     container.get(0).tagName == 'SCRIPT'
                         ? container
                         : container.find('[template]')
-
                 var renderTemplate = function (template, data, callback) {
                     laytpl(template.html()).render(data, function (html) {
                         try {
@@ -125,14 +124,21 @@ layui
                 url = url || conf.entry
                 loadBar.start()
                 var queryIndex = url.indexOf('?')
-                if (queryIndex !== -1) url = url.slice(0, queryIndex)
+                var old_url = url;
+                var other = "";
+                if (queryIndex !== -1) {
+                    url = url.slice(0, queryIndex)
+                    other = old_url.slice(queryIndex + 1, old_url.length)
+                }
+                //拼接总得url
+                var complete_url = (url.indexOf(conf.base) === 0 ? '' : conf.views) +
+                    url +
+                    conf.engine +
+                    '?v=' +
+                    layui.cache.version;
+                if (other !== "") complete_url = complete_url + "&" + other;
                 $.ajax({
-                    url:
-                        (url.indexOf(conf.base) === 0 ? '' : conf.views) +
-                        url +
-                        conf.engine +
-                        '?v=' +
-                        layui.cache.version,
+                    url: complete_url,
                     type: 'get',
                     dataType: 'html',
                     success: function (html) {

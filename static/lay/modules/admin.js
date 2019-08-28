@@ -191,6 +191,15 @@ layui
                 layui.data(conf.tableName, settings, storage)
             }
         }
+        self.submitToJump = function (close_url, open_url) {
+            if (open_url === undefined || close_url === undefined) return
+            self.navigate(open_url);
+            view.tab.del(close_url, open_url)
+            setTimeout(function () {
+                view.tab.refresh(open_url);
+            }, 100)
+            return true
+        }
 
         self.modal = {}
         self.modal.info = function (msg, params) {
