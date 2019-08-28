@@ -425,6 +425,8 @@ layui
                 if (fluid.length > 0) {
                     title = fluid.attr('lay-title')
                     self.setTitle(title)
+                } else {
+
                 }
 
                 var container = self.containerBody || self.container

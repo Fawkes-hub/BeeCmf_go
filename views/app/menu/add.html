@@ -147,7 +147,6 @@
         if (loading.is(":visible")) return;
         loading.show();
         form.on('submit(form-group-submit)', function (data) {
-            console.log(data.field)
             //想后台发送请求进行登录操作
             admin.post({
                 api: 'addMenu',

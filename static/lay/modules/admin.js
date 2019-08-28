@@ -422,7 +422,7 @@ layui
         self.on('refresh', function (e) {
             var url = self.route.href
             if (conf.viewTabs == true) {
-                //view.tab.refresh(url);
+                view.tab.refresh(url);
             } else {
                 view.render(location.hash)
             }

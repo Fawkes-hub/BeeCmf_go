@@ -13,5 +13,6 @@ func (c *IndexController) Layout() {
 }
 
 func (c *IndexController) Main() {
-	c.Ctx.WriteString("这是访问的主要内容")
+	c.Display("index")
+	//c.Ctx.WriteString("这是访问的主要内容")
 }

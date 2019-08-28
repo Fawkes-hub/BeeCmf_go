@@ -19,6 +19,7 @@ var (
 	ModelMenuLists models.Menu
 	ModelMenuAdd   models.Menu
 	ModelMenuOne   models.Menu
+	ModelMenuDel   models.Menu
 )
 
 //组合成为厚一点菜单
@@ -68,8 +69,16 @@ func AddMenu(menu *models.Menu) (err error) {
 	return ModelMenuAdd.AddMenuData()
 }
 
+//根据结构体条件查询数据
 func GetMenuByMap(menu *models.Menu) (data interface{}, err error) {
 	ModelMenuOne = *menu
 	data, err = ModelMenuOne.OneMenu()
+	return
+}
+
+//根据结构体条件删除数据
+func DelMenuByMap(menu *models.Menu) (err error) {
+	ModelMenuDel = *menu
+	err = ModelMenuDel.DelMenu()
 	return
 }

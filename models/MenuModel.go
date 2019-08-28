@@ -60,3 +60,8 @@ func (m *Menu) OneMenu() (menu Menu, err error) {
 	logs.Info("查询条件", m)
 	return menu, Db.Model(Menu{}).Where(&m).First(&menu).Error
 }
+
+func (m *Menu) DelMenu() (err error) {
+	Db.LogMode(true)
+	return Db.Model(Menu{}).Delete(&m).Error
+}

@@ -1,6 +1,7 @@
 package AppController
 
 import (
+	"github.com/astaxie/beego/logs"
 	"strconv"
 
 	"github.com/BeeCmf/app/AppService"
@@ -71,5 +72,25 @@ func (c *MenuController) Lists() {
 		}
 		c.Data["json"] = lists
 		c.Abort200(lists, "", "")
+	}
+}
+
+//删除
+func (c *MenuController) Del() {
+	//删除父级 所有子级全部删除
+	id, _ := c.GetInt("id", 0)
+	logs.Info("请求删除的id", id)
+	if id != 0 {
+		//查找名称
+		var maps models.Menu
+		maps.Id = id
+		data, _ := AppService.GetMenuByMap(&maps)
+		if data.(models.Menu).Id == 0 {
+			c.Abort500("数据不存在，请刷新后操作", "")
+		}
+		if err := AppService.DelMenuByMap(&maps); err != nil {
+			c.Abort500("数据不存在，请刷新后操作："+err.Error(), "")
+		}
+		c.Abort200("", "删除成功", "")
 	}
 }
