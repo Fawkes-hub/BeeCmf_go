@@ -63,10 +63,15 @@ func getMenuData(menus []models.Menu, data_type string) []map[string]interface{}
 	return MenusData
 }
 
-//添加数据
-func AddMenu(menu *models.Menu) (err error) {
+//添加和编辑操作数据
+func SaveMenu(menu *models.Menu) (err error) {
 	ModelMenuAdd = *menu
-	return ModelMenuAdd.AddMenuData()
+	if ModelMenuAdd.Id == 0 {
+		err = ModelMenuAdd.AddMenuData()
+	} else {
+		err = ModelMenuAdd.EditMenuData()
+	}
+	return err
 }
 
 //根据结构体条件查询数据

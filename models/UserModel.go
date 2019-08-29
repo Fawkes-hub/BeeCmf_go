@@ -51,7 +51,6 @@ func (u *User) GetUserInfo(field ...interface{}) (user User, err error) {
 		}
 	}
 	fieldStr = strings.Trim(fieldStr, ",")
-	logs.Info("传入的用户查询信息", u)
 	res := Db.Model(User{}).Where(&u).Select(fieldStr).First(&user).RecordNotFound()
 	if res {
 		return user, errors.New("未查询到数据")

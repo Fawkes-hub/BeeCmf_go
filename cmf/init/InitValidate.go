@@ -6,7 +6,11 @@
 
 package init
 
-import "github.com/astaxie/beego/validation"
+import (
+	"github.com/astaxie/beego/validation"
+	"regexp"
+	"strconv"
+)
 
 func InitValidate() {
 	SetDefaultMessage()
@@ -37,14 +41,21 @@ var MessageTmpls = map[string]string{
 
 //默认设置通用的错误验证和提示项
 func SetDefaultMessage() {
-	if len(MessageTmpls) == 0 {
+	//增加默认的自定义验证方法
+	_ = validation.AddCustomFunc("NonNegativeInteger", NonNegativeInteger)
+	validation.SetDefaultMessage(MessageTmpls)
+}
+
+//自定义验证为非负正整数
+var NonNegativeInteger validation.CustomFunc = func(v *validation.Validation, obj interface{}, key string) {
+	var regu = regexp.MustCompile("^\\d+$") //亲测可用
+	name, ok := obj.(int)
+	if !ok {
+		v.AddError(key, "传入的字段格式不正确")
 		return
 	}
-	//将默认的提示信息转为自定义
-	for k, _ := range MessageTmpls {
-		validation.MessageTmpls[k] = MessageTmpls[k]
+	result := regu.MatchString(strconv.FormatInt(int64(name), 10))
+	if !result {
+		v.AddError(key, "必须是非负正整数")
 	}
-
-	//增加默认的自定义验证方法
-	//_ = validation.AddCustomFunc("Unique", Unique)
 }

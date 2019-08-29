@@ -26,8 +26,8 @@ func (c *MenuController) Index() {
 	}
 }
 
-//菜单的添加
-func (c *MenuController) Add() {
+//菜单的添加和编辑操作
+func (c *MenuController) Save() {
 	var (
 		maps  models.Menu
 		data  models.Menu
@@ -39,18 +39,20 @@ func (c *MenuController) Add() {
 		id, _ := c.GetInt("id", 0)
 		parent_id, _ := c.GetInt("parent_id", 0)
 		c.Data["option"] = ""
+		c.Data["isEdit"] = false
 		if parent_id != 0 {
 			//查找名称
 			maps.Id = parent_id
 			data, _ := AppService.GetMenuByMap(&maps)
 			c.Data["option"] = "<option value='" + strconv.FormatInt(int64(parent_id), 10) + "' selected>" + data.Name + "</option>"
 		} else if id != 0 {
+			c.Data["isEdit"] = true
 			//查找名称
 			maps.Id = id
 			data, _ = AppService.GetMenuByMap(&maps)
 			c.Data["option"] = ""
-			if data.ParentId != null { //找到父级信息
-				parent_id = int(data.ParentId.Int64)
+			if data.NullParentId != null { //找到父级信息
+				parent_id = int(data.NullParentId.Int64)
 				//查找名称
 				maps2.Id = parent_id
 				data, _ := AppService.GetMenuByMap(&maps2)
@@ -72,8 +74,8 @@ func (c *MenuController) Add() {
 			c.Abort500(err.Error(), "")
 		}
 		//数据的添加
-		params.ParentId = params.ParentId
-		err = AppService.AddMenu(&params)
+		params.ParentId = int(params.NullParentId.Int64)
+		err = AppService.SaveMenu(&params)
 		if err != nil {
 			c.Abort500(err.Error(), "")
 		}

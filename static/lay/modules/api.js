@@ -4,8 +4,7 @@ layui.define([], function (exports) {
         login: 'login',
         //菜单栏接口
         getMenu: "menu/index",
-        addMenu: "menu/add",
-        editMenu: "menu/edit",
+        addMenu: "menu/save",
         delMenu: "menu/del",
         listsMenu: "menu/lists",
 

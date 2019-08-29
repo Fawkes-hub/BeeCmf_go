@@ -6,7 +6,7 @@
                     <label class="layui-form-label">上级菜单栏</label>
                     <div class="layui-input-block">
                         <label>
-                            <select name="parent_id" lay-verify="required">
+                            <select name="null_parent_id" lay-verify="required">
                                 [^if .option|len ^]
                                 [^ .option|str2html ^]
                                 [^else^]
@@ -16,11 +16,14 @@
                         </label>
                     </div>
                 </div>
+                <input type="hidden" name="id"
+                       value="[^ .data.Id ^]"
+                >
                 <div class="layui-form-item">
                     <label class="layui-form-label">菜单名称</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="name" lay-verify="required" placeholder="请输入菜单名称"
+                            <input type="text" name="name" lay-verify="required|max30" placeholder="请输入菜单名称"
                                    autocomplete="off" value="[^ .data.Name ^]"
                                    class="layui-input">
                         </label>
@@ -30,7 +33,7 @@
                     <label class="layui-form-label">控制器</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="controller" lay-verify="required" placeholder="请输入控制器名"
+                            <input type="text" name="controller" lay-verify="required|max30" placeholder="请输入控制器名"
                                    autocomplete="off" value="[^ .data.Controller ^]"
                                    class="layui-input">
                         </label>
@@ -40,7 +43,7 @@
                     <label class="layui-form-label">方法</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="action" lay-verify="required" placeholder="请输入方法名"
+                            <input type="text" name="action" lay-verify="required|max30" placeholder="请输入方法名"
                                    autocomplete="off" value="[^ .data.Action ^]"
                                    class="layui-input">
                         </label>
@@ -50,7 +53,7 @@
                     <label class="layui-form-label">参数</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="param" placeholder="请输入参数"
+                            <input type="text" name="param" placeholder="请输入参数" lay-verify="max30"
                                    autocomplete="off" value="[^ .data.Param ^]"
                                    class="layui-input">
                         </label>
@@ -60,7 +63,7 @@
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
                         <label>
-                            <input type="text" name="icon" placeholder="请输入"
+                            <input type="text" name="icon" placeholder="请输入" lay-verify="max50"
                                    autocomplete="off" value="[^ .data.Icon ^]"
                                    class="layui-input">
                         </label>
@@ -78,7 +81,7 @@
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
                         <label>
-                            <textarea name="remark" placeholder="请输入内容"
+                            <textarea name="remark" placeholder="请输入内容" lay-verify="max250"
                                       class="layui-textarea">[^ .data.Remark ^]</textarea>
                         </label>
                     </div>
@@ -89,6 +92,7 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="status">
+                                [^ if .isEdit ^]
                                 [^ if eq .data.Status 0 ^]
                                 <option value="1">在左侧菜单展示</option>
                                 <option value="0" selected>在左侧菜单隐藏</option>
@@ -96,8 +100,10 @@
                                 <option value="1" selected>在左侧菜单展示</option>
                                 <option value="0">在左侧菜单隐藏</option>
                                 [^ end ^]
-
-
+                                [^ else ^]
+                                <option value="1" selected>在左侧菜单展示</option>
+                                <option value="0">在左侧菜单隐藏</option>
+                                [^ end ^]
                             </select>
                         </label>
                     </div>
@@ -107,7 +113,7 @@
                     <div class="layui-input-block">
                         <label>
                             <select name="type">
-
+                                [^ if .isEdit ^]
                                 <option value="1"
                                         [^ if eq .data.Type 1 ^]
                                         selected
@@ -126,6 +132,12 @@
                                         [^ end ^]
                                 >只作为菜单
                                 </option>
+                                [^ else ^]
+                                <option value="1" selected>有界面可访问菜单</option>
+                                <option value="2">无界面可访问菜单</option>
+                                <option value="0">只作为菜单</option>
+                                [^ end ^]
+
                             </select>
                         </label>
                     </div>
@@ -150,11 +162,11 @@
                     <div class="layui-input-block">
                         <label>
                             <input type="text" name="list_order" placeholder="请输入排序" autocomplete="off"
-                                   class="layui-input"
-                                   [^ if eq .data.ListOrder 0 ^]
-                                   value="10000"
-                                   [^ else ^]
+                                   class="layui-input" lay-verify="NonNegativeInteger"
+                                   [^ if .data.ListOrder ^]
                                    value="[^ .data.ListOrder ^]"
+                                   [^ else ^]
+                                   value="100"
                                    [^ end ^]>
                         </label>
                     </div>
@@ -185,6 +197,28 @@
         var layUrl = $(this)[0].view.containerBody.find(".nepadmin-tabs-item").attr("lay-url")
         var loading = $(this).find('.layui-icon');
         if (loading.is(":visible")) return;
+        //验证字段
+        form.verify({
+            max30: function (value, item) {
+                if (value.length > 30) {
+                    return "最多30个字符"
+                }
+            },
+            max50: function (value, item) {
+                if (value.length > 50) {
+                    return "最多50个字符"
+                }
+            },
+            max250: function (value, item) {
+                if (value.length > 250) {
+                    return "最多250个字符"
+                }
+            },
+            NonNegativeInteger: [
+                /^\d+$/
+                , '必须为非负正整数'
+            ],
+        });
         loading.show();
         form.on('submit(form-group-submit)', function (data) {
             //想后台发送请求进行登录操作

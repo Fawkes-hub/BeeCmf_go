@@ -128,13 +128,11 @@
             return false
         }
         //页面跳转到添加页面
-        admin.navigate("/menu/add?parent_id=" + obj.data.mid);
+        admin.navigate("/menu/save?parent_id=" + obj.data.mid);
     }
-
     function edit(obj) {
-        console.log(obj, "edit")
         //页面跳转到添加页面
-        admin.navigate("/menu/add?id=" + obj.data.mid);
+        admin.navigate("/menu/save?id=" + obj.data.mid);
     }
 
     function openorclose() {

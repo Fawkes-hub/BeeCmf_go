@@ -4,7 +4,6 @@ import (
 	"github.com/BeeCmf/cmf/common"
 	"github.com/BeeCmf/models"
 	"github.com/astaxie/beego/cache"
-	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/utils/captcha"
 	"github.com/astaxie/beego/validation"
 )
@@ -44,7 +43,6 @@ func (c *LoginController) Login() {
 			c.GetString("password"),
 		)
 		if err != nil {
-			logs.Info("错误信息：", err.Error())
 			c.Abort500(err.Error(), "")
 		} else {
 			user.Pwd = ""
@@ -53,7 +51,6 @@ func (c *LoginController) Login() {
 			var userInfo = make(map[string]interface{})
 			userInfo["token"] = common.SycMd5(user.Login + user.Pwd)
 			userInfo["user"] = user
-			logs.Info("是否进入了登录成功地址")
 			c.Abort200(userInfo, "登录成功", "/")
 		}
 	} else {

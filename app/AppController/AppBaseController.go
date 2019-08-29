@@ -3,7 +3,6 @@ package AppController
 import (
 	"github.com/BeeCmf/cmf/common"
 	"github.com/BeeCmf/models"
-	"github.com/astaxie/beego/logs"
 )
 
 //控制器的后台基础
@@ -17,7 +16,6 @@ type AppBaseController struct {
 func (base *AppBaseController) NextPreparer() {
 	////检测当前用户有已经登录
 	isLogin, user := base._checkLogin()
-	logs.Info("是否登录状态", isLogin)
 	if isLogin == false {
 		controller, _ := base.GetControllerAndAction()
 		if controller != "LoginController" {
