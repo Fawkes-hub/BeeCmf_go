@@ -34,9 +34,9 @@ func (a *MenuValidate) ValidMenu() (err error) {
 	menu.Action = a.Action
 	menu.Param = a.Param
 	menu.ParentId = a.ParentId
-	menus, err := menu.OneMenu()
-	if !reflect.DeepEqual(menus, models.Menu{}) {
-		if menus.Id != a.Id {
+	_ = menu.OneMenu()
+	if !reflect.DeepEqual(menu, models.Menu{}) {
+		if menu.Id != a.Id {
 			return errors.New("当前控制器与方法在存在，请重新填写")
 		}
 	}

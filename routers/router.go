@@ -14,7 +14,7 @@ func init() {
 
 	//前台的路由
 	//beego.Include(&ApiController.IndexController{})
-
+	beego.SetStaticPath("/upload", "upload")                                //上传目录
 	beego.Router("/", &AppController.IndexController{}, "get:Index")        //首页
 	beego.Router("/layout", &AppController.IndexController{}, "get:Layout") //layout页面
 	beego.Router("/main", &AppController.IndexController{}, "get:Main")     //首页

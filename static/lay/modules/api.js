@@ -9,5 +9,7 @@ layui.define([], function (exports) {
         listsMenu: "menu/lists",
 
         getGoods: 'json/goods.js',
+        saveConfig: "sys/config",
+        UpImg: "sys/upimg"
     });
 })

@@ -5,8 +5,8 @@ package AppService
 
 import (
 	"github.com/BeeCmf/models"
-	//_ "github.com/BeeCmf/models"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 type Menu struct {
@@ -66,6 +66,7 @@ func getMenuData(menus []models.Menu, data_type string) []map[string]interface{}
 //添加和编辑操作数据
 func SaveMenu(menu *models.Menu) (err error) {
 	ModelMenuAdd = *menu
+	logs.Info("最后添加传入的数据", ModelMenuAdd)
 	if ModelMenuAdd.Id == 0 {
 		err = ModelMenuAdd.AddMenuData()
 	} else {
@@ -77,8 +78,7 @@ func SaveMenu(menu *models.Menu) (err error) {
 //根据结构体条件查询数据
 func GetMenuByMap(menu *models.Menu) (data models.Menu, err error) {
 	ModelMenuOne = *menu
-	data, err = ModelMenuOne.OneMenu()
-	return
+	return ModelMenuOne, ModelMenuOne.OneMenu()
 }
 
 //根据结构体条件删除数据

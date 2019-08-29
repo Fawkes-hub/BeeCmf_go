@@ -29,11 +29,12 @@ func (c *MenuController) Index() {
 //菜单的添加和编辑操作
 func (c *MenuController) Save() {
 	var (
-		maps  models.Menu
-		data  models.Menu
-		maps2 models.Menu
-		err   error
-		null  sql.NullInt64
+		maps      models.Menu
+		data      models.Menu
+		maps2     models.Menu
+		err       error
+		null      sql.NullInt64
+		parent_id int
 	)
 	if c.IsHtml() {
 		id, _ := c.GetInt("id", 0)
@@ -63,6 +64,10 @@ func (c *MenuController) Save() {
 		c.Display()
 	} else {
 		params := models.Menu{}
+		parent_id, err = c.GetInt("parent_id", 0)
+		if parent_id != 0 { //给nullParentId 赋值 作为最终添加的数据
+			params.NullParentId.Int64, params.NullParentId.Valid = int64(parent_id), true
+		}
 		if err := c.ParseForm(&params); err != nil {
 			c.Abort500("传入参数错误："+err.Error(), "")
 		}

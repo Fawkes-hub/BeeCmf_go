@@ -1,7 +1,13 @@
 package common
 
 import (
+	"errors"
+	"fmt"
+	"math/rand"
+	"os"
+	"path"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -144,4 +150,33 @@ func (c *BaseController) IsHtml() bool {
 	header := c.Ctx.Request.Header
 	return c.Ctx.Request.Method == "GET" &&
 		(strings.Index(header.Get("Accept"), "text/html") != -1)
+}
+
+//文件上传处理
+func (c *BaseController) SaveFile(PIC_PATH string, AllowExt map[string]bool) (fpath string, error error) {
+	f, h, _ := c.GetFile("file")
+	//获取后缀
+	ext := path.Ext(h.Filename)
+	if _, err := AllowExt[ext]; !err {
+		return "", errors.New("上传文件格式不正确")
+	}
+	//创建保存目录
+
+	uploadDir := PIC_PATH + time.Now().Format("2006/01/02/")
+	err := os.MkdirAll(uploadDir, 755)
+	if err != nil {
+		return "", err
+	}
+	//构造文件名称
+	rand.Seed(time.Now().UnixNano())
+	randNum := fmt.Sprintf("%d", rand.Intn(9999)+1000)
+	hashName := SycMd5(time.Now().Format("2006_01_02_15_04_05_") + randNum)
+	fileName := fmt.Sprintf("%x", hashName) + ext
+	fpath = uploadDir + fileName
+	defer f.Close() //关闭上传的文件，不然的话会出现临时文件不能清除的情况
+	err = c.SaveToFile("file", fpath)
+	if err != nil {
+		return "", err
+	}
+	return fpath, nil
 }

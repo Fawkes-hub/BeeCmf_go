@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/BeeCmf/cmf/common"
-	"github.com/astaxie/beego/logs"
 	"strings"
 )
 

@@ -63,12 +63,10 @@ func (m *Menu) AllMenu() (menu []Menu, err error) {
 }
 
 //获取所有的菜单
-func (m *Menu) OneMenu() (menu Menu, err error) {
-	Db.LogMode(true)
-	return menu, Db.Model(Menu{}).Where(&m).First(&menu).Error
+func (m *Menu) OneMenu() (err error) {
+	return Db.Model(Menu{}).Where(&m).First(&m).Error
 }
 
 func (m *Menu) DelMenu() (err error) {
-	Db.LogMode(true)
 	return Db.Model(Menu{}).Delete(&m).Error
 }

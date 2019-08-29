@@ -192,7 +192,7 @@ layui
             }
         }
         self.submitToJump = function (close_url, open_url) {
-            if (open_url === undefined || close_url === undefined) return
+            if (open_url === undefined || close_url === undefined) return view.tab.refresh(open_url);
             self.navigate(open_url);
             view.tab.del(close_url, open_url)
             setTimeout(function () {

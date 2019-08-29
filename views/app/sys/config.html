@@ -1,0 +1,153 @@
+<div class="layui-fluid" lay-title="网站配置">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="" method="post" lay-filter="form-group">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站LOGO</label>
+                    <div class="layui-input-block">
+                        <label>
+                            <input type="hidden" name="site_logo"
+                                   autocomplete="off" value="[^ .data.SiteLogo ^]"
+                                   class="layui-input">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="upload_logo">上传LOGO</button>
+                                <div class="layui-upload-list">
+                                    <img style="height: 150px" class="layui-upload-img" id="avatar-img"
+                                         src="[^ .data.SiteLogo ^]" alt="LOGO">
+                                    <p id="siteLogo"></p>
+                                </div>
+                            </div>
+                            <img src="" alt="" width="50px" height="50px">
+                        </label>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站名称</label>
+                    <div class="layui-input-block">
+                        <label>
+                            <input type="text" name="site_name" lay-verify="required|max30" placeholder="请输入方法名"
+                                   autocomplete="off" value="[^ .data.SiteName ^]"
+                                   class="layui-input">
+                        </label>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">网站描述</label>
+                    <div class="layui-input-block">
+                        <label>
+                            <textarea name="remark" placeholder="请输入内容" lay-verify="max250"
+                                      class="layui-textarea">[^ .data.Remark ^]</textarea>
+                        </label>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="form-group-submit">
+                            <i style="display: none"
+                               class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop"></i>
+                            立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form', 'upload'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , element = layui.element
+            , layer = layui.layer
+            , upload = layui.upload
+            , form = layui.form;
+        form.render(null, 'form-group');
+        var layUrl = $(this)[0].view.containerBody.find(".nepadmin-tabs-item").attr("lay-url")
+        var loading = $(this).find('.layui-icon');
+        if (loading.is(":visible")) return;
+        //验证字段
+        form.verify({
+            max30: function (value, item) {
+                if (value.length > 30) {
+                    return "最多30个字符"
+                }
+            },
+            max250: function (value, item) {
+                if (value.length > 250) {
+                    return "最多250个字符"
+                }
+            },
+            NonNegativeInteger: [
+                /^\d+$/
+                , '必须为非负正整数'
+            ],
+        });
+        loading.show();
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#upload_logo'
+            , url: layui.api.UpImg
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#avatar-img').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (result) {
+                if (result.code === 500) {
+                    layer.msg(result.msg, {
+                        icon: 2,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    });
+                } else {
+                    layer.msg("上传成功", {
+                        icon: 1,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        $('input[name="site_logo"]').val(result.data)
+                    });
+                }
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        form.on('submit(form-group-submit)', function (data) {
+            //想后台发送请求进行登录操作
+            admin.post({
+                api: 'saveConfig',
+                type: "post",
+                data: data.field,
+                success: function (res) {
+                    layer.msg(res.msg, {
+                        icon: 1,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        admin.submitToJump(layUrl, res.url)
+                    });
+                },
+                error: function (res) {
+                    layer.msg(res.msg, {
+                        icon: 2,
+                        time: 800 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        loading.hide();
+                    });
+
+                },
+                complete: function () {
+                    //loading.hide();
+                }
+            });
+            return false;
+        });
+    });
+</script>

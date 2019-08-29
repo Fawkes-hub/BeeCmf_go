@@ -9,6 +9,9 @@ func InitConfig() {
 	LoadConfig("data/conf/database.conf")
 	beego.BConfig.WebConfig.TemplateLeft = "[^"
 	beego.BConfig.WebConfig.TemplateRight = "^]"
+
+	//导入app文件下的配置信息
+	LoadConfig("app/app.conf")
 }
 
 func LoadConfig(path string) {
