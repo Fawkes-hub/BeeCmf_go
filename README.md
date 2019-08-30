@@ -14,7 +14,7 @@ BeeCmf是基于Beego开发的易用、易扩展、界面友好的轻量级管理
 后端语言：golang  
 后端框架：[beego.me](http://beego.me).  
 后台框架：[nepadmin 后台单页面模板](https://github.com/fanjyy/nepadmin).
-#界面展示
+#  界面展示
 ![主页](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/主页.jpg)
 ![登录](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/登录.png)
 ![网站配置](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/网站配置.png)
