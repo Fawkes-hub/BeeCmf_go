@@ -6,7 +6,6 @@ package AppService
 import (
 	"github.com/BeeCmf/models"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 )
 
 type Menu struct {
@@ -66,7 +65,6 @@ func getMenuData(menus []models.Menu, data_type string) []map[string]interface{}
 //添加和编辑操作数据
 func SaveMenu(menu *models.Menu) (err error) {
 	ModelMenuAdd = *menu
-	logs.Info("最后添加传入的数据", ModelMenuAdd)
 	if ModelMenuAdd.Id == 0 {
 		err = ModelMenuAdd.AddMenuData()
 	} else {
@@ -84,6 +82,30 @@ func GetMenuByMap(menu *models.Menu) (data models.Menu, err error) {
 //根据结构体条件删除数据
 func DelMenuByMap(menu *models.Menu) (err error) {
 	ModelMenuDel = *menu
-	err = ModelMenuDel.DelMenu()
-	return
+	//增加一个事务 防止删除中出错
+	tx := models.Db.Begin()
+	//给一个空的数组切片  然后将每一次循环查到的数据进行循环存入
+	var ChildIds = []int{}
+	AllChildIds := getMenuChildId(ChildIds, ModelMenuDel.Id)
+	for _, id := range AllChildIds {
+		ModelMenuDel.Id = id
+		err = ModelMenuDel.DelMenu()
+		if err != nil {
+			tx.Rollback()
+		}
+	}
+	tx.Commit()
+	return nil
+}
+
+//递归得到菜单的所有自己
+func getMenuChildId(ChildIds []int, MenuId int) (NewChildIds []int) {
+	NewChildIds = append(ChildIds, MenuId)
+	var Child models.Menu
+	ChildDatas, _ := Child.QueryMenuLists(MenuId)
+	for _, v := range ChildDatas {
+		//将自己id写进去后在进行一次查询子级
+		NewChildIds = getMenuChildId(NewChildIds, v.Id)
+	}
+	return NewChildIds
 }
