@@ -1,6 +1,7 @@
 package AppController
 
 import (
+	"github.com/BeeCmf/app/AppService"
 	"github.com/BeeCmf/cmf/common"
 	"github.com/BeeCmf/models"
 )
@@ -26,6 +27,10 @@ func (base *AppBaseController) NextPreparer() {
 	} else {
 		base.Data["isLogin"] = true
 	}
+	//获取网站配置
+	var site AppService.SiteConfig
+	_ = site.GetSiteConfig()
+	base.Data["data"] = site
 	base.Data["user"] = user
 }
 

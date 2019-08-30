@@ -9,7 +9,6 @@ package AppService
 import (
 	"encoding/json"
 	"errors"
-	"github.com/BeeCmf/cmf/common"
 	"github.com/BeeCmf/models"
 	"reflect"
 )
@@ -42,17 +41,14 @@ func (s *SiteConfig) AddSiteConfig() error {
 }
 
 //获取网站配置  并且转为结构体返回
-func (s *SiteConfig) GetSiteConfig() (SiteConfig, error) {
+func (s *SiteConfig) GetSiteConfig() error {
 	var (
-		//data models.Option
-		siteConfig SiteConfig
-		err        error
+		data models.Option
+		err  error
 	)
-	//err = common.CmfGetOption(siteConfig,"site_config")
-	err = common.CmfGetOption("site_config")
-	//data.OptionName = "site_config"
+	data.OptionName = "site_config"
 	////获取当前网站配置的数据
-	//_ = data.OneOption()
-	//err = json.Unmarshal([]byte(data.OptionValue), &siteConfig)
-	return siteConfig, err
+	_ = data.OneOption()
+	err = json.Unmarshal([]byte(data.OptionValue), &s)
+	return err
 }

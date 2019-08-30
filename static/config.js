@@ -27,7 +27,7 @@ layui.define(function (exports) {
         //是否开启调试模式，开启的话接口异常会抛出异常 URL信息
         debug: layui.cache.debug,
         //网站名称
-        name: 'nepadmin',
+        name: 'BeeCMF',
         //默认视图文件名
         entry: '/main',
         //视图文件后缀名

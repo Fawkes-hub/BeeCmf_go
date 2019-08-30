@@ -6,10 +6,6 @@
 
 package models
 
-import (
-	"github.com/astaxie/beego/logs"
-)
-
 //获取option信息
 type Option struct {
 	Id            int
@@ -17,16 +13,6 @@ type Option struct {
 	OptionName    string `alias:"配置名称"`
 	OptionValue   string `alias:"配置值"`
 	OptionComment string `alias:"中文备注"`
-}
-
-func (m *Option) GetOption(option_name string) (OptionValue string) {
-	logs.Info("传入的查询条件", m)
-	Db.LogMode(true)
-	m.OptionName = option_name
-	logs.Info("传入的查询条件", m)
-	//_ = m.OneOption()
-	Db.Model(Option{}).Where(&m).First(&m)
-	return m.OptionValue
 }
 
 func (m *Option) OneOption() (err error) {

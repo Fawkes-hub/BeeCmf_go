@@ -21,8 +21,8 @@ func (c *SysController) Config() {
 	if c.IsHtml() {
 		//读取option配置
 		var site AppService.SiteConfig
-		siteC, _ := site.GetSiteConfig()
-		c.Data["data"] = siteC
+		_ = site.GetSiteConfig()
+		c.Data["data"] = site
 		c.Display()
 	} else {
 		if err := c.ParseForm(&site); err != nil {

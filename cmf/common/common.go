@@ -3,7 +3,6 @@ package common
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/astaxie/beego/logs"
 	"io"
 	"math/rand"
 	"strconv"
@@ -46,27 +45,4 @@ func RandomString(length int) string {
 		}
 	}
 	return strings.Join(result, "")
-}
-
-type PrintOption interface {
-	GetOption(option_name string) (option_value string)
-}
-
-//转JSON
-func CmfGetOption(option_name string) error {
-	var (
-		err error
-	)
-	var data PrintOption
-	logs.Info("传入的查询条件1212", data)
-	option_value := data.GetOption(option_name)
-	logs.Info("option_value结果", option_value)
-	logs.Info("data", err)
-	//option := data.GetOption()
-	//logs.Info("返回的数据",option)
-	//option.OptionName = option_name
-	//获取当前网站配置的数据
-	//_ = option.OneOption()
-	//err = json.Unmarshal([]byte(option_value), &Current)
-	return err
 }
