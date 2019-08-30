@@ -20,7 +20,7 @@ BeeCmf是基于Beego开发的易用、易扩展、界面友好的轻量级管理
 ![网站配置](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/网站配置.png)
 ![表单提交](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/表单提交.png)
 # 安装方法    
-1、go get https://github.com/fengke549015/BeeCmf_go
+1、go get github.com/fengke549015/BeeCmf_go
 2、创建mysql数据库，并将beecmf.sql导入    
 3、修改data/conf/database.conf配置数据库    
 4、运行 go build    
