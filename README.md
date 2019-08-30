@@ -15,10 +15,10 @@ BeeCmf是基于Beego开发的易用、易扩展、界面友好的轻量级管理
 后端框架：[beego.me](http://beego.me).  
 后台框架：[nepadmin 后台单页面模板](https://github.com/fanjyy/nepadmin).
 #界面展示
-![avatar](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/主页.jpg)
-![avatar](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/登录.jpg)
-![avatar](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/网站配置.png)
-![avatar](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/表单提交.png)
+![主页](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/主页.jpg)
+![登录](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/登录.png)
+![网站配置](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/网站配置.png)
+![表单提交](https://github.com/fengke549015/BeeCmf_go/blob/master/static/images/demo/表单提交.png)
 # 安装方法    
 1、go get https://github.com/fengke549015/BeeCmf_go
 2、创建mysql数据库，并将beecmf.sql导入    
