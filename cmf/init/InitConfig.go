@@ -5,11 +5,8 @@ import "github.com/astaxie/beego"
 //初始化配置文件
 
 func InitConfig() {
-	LoadConfig("data/conf/conf.conf")
-	LoadConfig("data/conf/database.conf")
 	beego.BConfig.WebConfig.TemplateLeft = "[^"
 	beego.BConfig.WebConfig.TemplateRight = "^]"
-
 	//导入app文件下的配置信息
 	LoadConfig("app/app.conf")
 }

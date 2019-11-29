@@ -10,11 +10,11 @@ import (
 //同意注册数据库配置
 func InitDatabase() {
 	//初始化配置信息
-	host := beego.AppConfig.DefaultString("db.host", "127.0.0.1")
-	user := beego.AppConfig.DefaultString("db.user", "root")
-	password := beego.AppConfig.DefaultString("db.password", "root")
-	port := beego.AppConfig.DefaultString("db.port", "3306")
-	dbname := beego.AppConfig.DefaultString("db.name", "beego_1")
+	host := beego.AppConfig.DefaultString("mysql::db.host", "127.0.0.1")
+	user := beego.AppConfig.DefaultString("mysql::db.user", "root")
+	password := beego.AppConfig.DefaultString("mysql::db.password", "")
+	port := beego.AppConfig.DefaultString("mysql::db.port", "3306")
+	dbname := beego.AppConfig.DefaultString("mysql::db.name", "beego_1")
 	dsn := user + ":" + password + "@(" + host + ":" + port + ")/" + dbname + "?charset=utf8&parseTime=True&loc=Local"
 	var err error
 	models.Db, err = gorm.Open("mysql", dsn)
