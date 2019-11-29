@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/BeeCmf/app/AppController"
+	"BeeCmf_go/app/AppController"
 	"github.com/astaxie/beego"
 )
 

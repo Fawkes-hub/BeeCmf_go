@@ -3,7 +3,7 @@ package init
 import (
 	"strings"
 
-	"github.com/BeeCmf/cmf/common"
+	"BeeCmf_go/cmf/common"
 	"github.com/astaxie/beego"
 )
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/BeeCmf/cmf/init"
-	_ "github.com/BeeCmf/routers"
+	_ "BeeCmf_go/cmf/init"
+	_ "BeeCmf_go/routers"
 	"github.com/astaxie/beego"
 )
 

@@ -1,7 +1,7 @@
 package ApiController
 
 import (
-	"github.com/BeeCmf/cmf/common"
+	"BeeCmf_go/cmf/common"
 )
 
 //控制器的后台基础

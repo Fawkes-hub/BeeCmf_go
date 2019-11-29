@@ -9,7 +9,7 @@ import (
 	"errors"
 	"reflect"
 
-	"github.com/BeeCmf/models"
+	"BeeCmf_go/models"
 	"github.com/astaxie/beego/validation"
 )
 

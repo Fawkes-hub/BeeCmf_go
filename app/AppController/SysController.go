@@ -7,7 +7,7 @@
 package AppController
 
 import (
-	"github.com/BeeCmf/app/AppService"
+	"BeeCmf_go/app/AppService"
 	"github.com/astaxie/beego"
 )
 

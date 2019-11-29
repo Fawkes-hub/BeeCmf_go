@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"strconv"
 
-	"github.com/BeeCmf/app/AppService"
-	"github.com/BeeCmf/app/AppValidate"
-	"github.com/BeeCmf/models"
+	"BeeCmf_go/app/AppService"
+	"BeeCmf_go/app/AppValidate"
+	"BeeCmf_go/models"
 )
 
 type MenuController struct {

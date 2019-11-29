@@ -1,8 +1,8 @@
 package models
 
 import (
+	"BeeCmf_go/cmf/common"
 	"errors"
-	"github.com/BeeCmf/cmf/common"
 	"strings"
 )
 

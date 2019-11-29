@@ -1,8 +1,8 @@
 package AppController
 
 import (
-	"github.com/BeeCmf/cmf/common"
-	"github.com/BeeCmf/models"
+	"BeeCmf_go/cmf/common"
+	"BeeCmf_go/models"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/utils/captcha"
 	"github.com/astaxie/beego/validation"

@@ -1,9 +1,9 @@
 package AppController
 
 import (
-	"github.com/BeeCmf/app/AppService"
-	"github.com/BeeCmf/cmf/common"
-	"github.com/BeeCmf/models"
+	"BeeCmf_go/app/AppService"
+	"BeeCmf_go/cmf/common"
+	"BeeCmf_go/models"
 )
 
 //控制器的后台基础
